@@ -400,8 +400,58 @@ function getData() {
     })
 };
 */
+// 디바이스 정보 업데이트 
+function resultSuccess(datas){
+   var dts = $.parseJSON(datas);
+   var regid = dts.regid;
+   var uuid  = dts.uuid;
+   var dev   = dts.dev;
+
+   localStorage.setItem("deviceid",uuid);
+   localStorage.setItem("token",regid);
+   localStorage.setItem("dev",dev);
+   alert([uuid, regid, dev]);
+}
+
+function resultFail(){
+   alert('fail');
+}
+
+function getUuid(_succFn){
+   var param = {
+      succFn : _succFn // Succ Fn name
+   };
+   var aa=Hybrid.exe('HybridIf.getUuid', param);
+
+}
+
+function openFileChooser(_succFn) {
+   var param = {
+      type : 'image/*',
+      crop : false,
+      succFn : _succFn
+   };
+   Hybrid.exe('HybridIf.openFileChooser', param);
+}
+function resultFileSuccess(dts) {
+   var data = $.parseJSON(dts);
+   console.log(data);
+
+   //$("#dlistImgPreview").html("<div onclick=\"fileRemove(this)\"><img src='"+data.name+"' style='width:100px;'><input type='hidden' name='photo' value='"+data.name+"' data-role='none'/></div>");
+            
+}
+
+function fileRemove(el) {
+   $(el).remove();
+            
+}
+
+openFileChooser('resultFileSuccess');
+
+getUuid("resultSuccess");
 
 </script>
+
 
 
 
