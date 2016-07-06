@@ -1,6 +1,16 @@
 <?php
 $areaList = getArea(); 
 $reverseAreaList = getReverseArea($areaList);
+
+// 소셜로그인 추가 
+$g['mdl_slogin'] = 'sociallogin';
+$g['use_social'] = is_file($g['path_module'].$g['mdl_slogin'].'/var/var.php');
+if ($g['use_social'])
+{
+	//$_isModal = true;
+	include $g['path_module'].$g['mdl_slogin'].'/lang.korean/action/a.slogin.check.php';
+}
+
 ?>
 
 <script type="text/javascript" src="jquery-1.12.3.min.js"></script>
@@ -118,10 +128,10 @@ function goHistoryBack() {
 	<div id="loginOverlay"></div>
 	<div id="loginViaSocial">
 		<span id="loginOverlayClose" class="icon icon-whitex"></span>
-		
-		<div id="facebookLogin" class="socialLoginButton"></div>
-		<div id="kakaoLogin" class="socialLoginButton"></div>
-		<div id="naverLogin" class="socialLoginButton"></div>
+        <?php foreach($g['snskor'] as $key => $val):?>
+		<?php if(!$d[$g['mdl_slogin']]['use_'.$key])continue?>
+		<div id="<?php echo $val[1]?>Login" class="socialLoginButton" onclick="window.open('<?php echo $slogin[$val[1]]['callapi']?>','','width=<?php echo $val[2]?>px,height=<?php echo $val[3]?>px,status=no,scrollbars=no,resizeable=no');"></div>
+		<?php endforeach?>
 		
 		<h3>이메일 로그인</h3>
 		<form id="LayoutLogForm" name="LayoutLogForm" action="<?php echo $g['s']?>/" method="post" target="_action_frame_<?php echo $m?>">
@@ -390,6 +400,7 @@ function getData() {
     })
 };
 */
+
 </script>
 
 
