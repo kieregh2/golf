@@ -1,0 +1,48 @@
+#configbox {}
+#configbox table {margin:0 0 20px 0;}
+#configbox td {padding:5px 0 5px 0;}
+#configbox .title {font-weight:bold;padding:10px 0 15px 0;margin:0 0 20px 0;border-bottom:#efefef solid 1px;}
+#configbox .td1 {padding:10px 0 5px 15px;width:100px;vertical-align:top;}
+#configbox .td2 {padding:10px 0 5px 0;color:#666666;}
+#configbox .td2 textarea {overflow:auto;border:#EFEFEF solid 1px;padding:6px 0 6px 10px;line-height:150%;width:350px;height:100px;color:#ffffff;}
+#configbox .td2 .guide {padding:10px 0 0 0;line-height:150%;font-family:dotum;font-size:11px;color:#888888;}
+#configbox .td2 .select1 {width:180px;letter-spacing:-1px;}
+#configbox .td2 .sname {width:174px;}
+#configbox .td2 .sname1 {width:307px;}
+#configbox .td2 .sname2 {width:82px;}
+#configbox .td2 .guide {font-size:11px;font-family:dotum;color:#555;line-height:150%;padding:10px 0 0 0;}
+
+#configbox .m {font-size:11px;font-family:dotum;color:#888;letter-spacing:-1px;}
+
+#configbox .submitbox {margin:20px 0 20px 0;padding:15px 0 0 115px;border-top:#dfdfdf solid 1px;}
+
+
+#configbox .bbsbody table {width:100%;_width:99.6%;border-spacing:0px;border-collapse:collapse;}
+#configbox .bbsbody table caption {display:none;}
+#configbox .bbsbody thead th {height:28px;border-top:#D2D2D2 solid 1px;border-bottom:#D2D2D2 solid 1px;background:url('../../../../../_core/image/_public/bg_list_tt.jpg');font-size:11px;font-family:dotum;color:#787878;letter-spacing:-1px;}
+#configbox .bbsbody thead .side1 {border-left:#D2D2D2 solid 1px;}
+#configbox .bbsbody thead .side2 {border-right:#D2D2D2 solid 1px;}
+#configbox .bbsbody tbody td {padding:5px 0 5px 0;text-align:center;font-family:dotum;font-size:11px;color:#888888;border-bottom:#E6E6E6 solid 1px;letter-spacing:-1px;}
+#configbox .bbsbody tbody tr:hover td {background:#efefef;}
+#configbox .bbsbody tbody tr:hover .sbj input {border:#cccccc solid 1px;background:#ffffff;}
+
+#configbox .bbsbody tbody .bid a {color:#9965C9;}
+#configbox .bbsbody tbody .lst u {text-decoration:none;position:relative;top:-2px;font-family:arial;font-size:10px;color:#ff0000;}
+#configbox .bbsbody tbody .sbj {text-align:left;padding-left:10px;line-height:130%;}
+#configbox .bbsbody tbody .sbj input {width:100%;height:15px;padding:2px 0 1px 2px;border:#ffffff solid 1px;}
+#configbox .bbsbody tbody .sbj input:focus {border:#cccccc solid 1px;background:#ffffff;}
+#configbox .bbsbody tbody .lay span {text-align:left;}
+#configbox .bbsbody tbody .cat {color:#c0c0c0;}
+#configbox .bbsbody tbody .cat span {font-weight:bold;color:#FE6665;}
+#configbox .bbsbody tbody .lay {color:#c0c0c0;}
+#configbox .bbsbody tbody .lay i {font-style:normal;font-weight:bold;color:#FE6665;}
+#configbox .bbsbody tbody .lay span {text-align:left;}
+#configbox .bbsbody tbody .perm {}
+#configbox .bbsbody tbody .perm span {text-align:left;}
+#configbox .bbsbody tbody .mng {}
+#configbox .bbsbody tbody .mng a {text-decoration:underline;color:#666666;display:inline-block;padding:0 2px 0 2px;}
+#configbox .bbsbody tbody .mng .del {color:#999999;}
+#configbox .bbsbody tbody .tooltip span {padding:8px 8px 5px 10px;line-height:170%;}
+#configbox .bbsbody tbody .none {padding:10px 0 10px 0;}
+#configbox .bbsbody tbody tr:hover .none {background:#ffffff;} 
+#configbox .bbsbody .pagebox01 {padding:15px 0 20px 0;text-align:center;}
