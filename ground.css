@@ -40,9 +40,77 @@
 #configbox .bbsbody tbody .perm {}
 #configbox .bbsbody tbody .perm span {text-align:left;}
 #configbox .bbsbody tbody .mng {}
-#configbox .bbsbody tbody .mng a {text-decoration:underline;color:#666666;display:inline-block;padding:0 2px 0 2px;}
+#configbox .bbsbody tbody .mng a {text-decoration:underline;color:#666666;display:block;padding:5px 0;}
 #configbox .bbsbody tbody .mng .del {color:#999999;}
 #configbox .bbsbody tbody .tooltip span {padding:8px 8px 5px 10px;line-height:170%;}
 #configbox .bbsbody tbody .none {padding:10px 0 10px 0;}
 #configbox .bbsbody tbody tr:hover .none {background:#ffffff;} 
 #configbox .bbsbody .pagebox01 {padding:15px 0 20px 0;text-align:center;}
+
+/*레이어 팝업 */
+#mask {
+    background: none repeat scroll 0 0 #000000;
+    display: none;
+    height: 100%;
+    left: 0;
+    opacity: 0.7;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+}
+.mask {
+    background: none repeat scroll 0 0 #000000;
+    display: none;
+    height: 100%;
+    left: 0;
+    opacity: 0.7;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+}
+#mask30 {opacity: 0.3;}
+#mask40 {opacity: 0.4;}
+#mask50 {opacity: 0.5;}
+#mask70 {opacity: 0.7;}
+
+.popup-layer {
+    background: none repeat scroll 0 0 #FFFFFF;
+    /*border: 2px solid #32394b;*/
+    border-radius: 3px;
+    box-shadow: 0 0 20px #999999;
+    font-size: 1.1em;
+    left:50%;
+    top:45%;
+    position: fixed;
+    z-index: 9999;
+    overflow-y:auto;
+    overflow-x:hidden;
+    height:0;
+}
+.popup-layer p {cursor: move;}
+.popup-layer .close_p {position:absolute;padding:0;margin:0;right:10px;top:10px;}
+.popup-layer .close {float:right;color:#fff;font-size: 12px;opacity:1;top:6px; text-shadow: none;font-weight: normal;}
+.popup-layer .tit_bar {height:40px;width:100%;position:absolute;top:0;background:url("/modules/team/lang.korean/admin/_pc/image/bg_poptop.gif") repeat-x top left #fff;}
+.popup-layer .cont_wrap {padding: 40px 10px 10px 10px;position: relative;}
+.popup-layer .cont_wrap input[type=text] {-webkit-transform : translate3d(0,0,0)};
+a.call-poplayer {text-decoration:underline;}
+.cnt_wrap {padding-top:20px;}
+.popup-layer .pop_title {color:#fff;font-size: 1em;position:absolute;top:10px;}
+
+.addcart-msg {
+    background: none repeat scroll 0 0 #111;
+    border: 2px solid #111;
+    color: #fff;
+    display: none;
+    font-size: 13px;
+    height: 20px;
+    left: 43%;
+    padding: 20px 0;
+    position: fixed;
+    top: 45%;
+    width:300px;
+    text-align: center;
+    z-index: 999999999;
+}

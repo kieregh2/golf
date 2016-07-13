@@ -580,7 +580,7 @@ function setMaps(lat,lng) {
 		<col width="100"></col> 
 		<col width="180"></col> 
 		<col width="100"></col> 
-		<col width="60"></col> 
+		<col width="70"></col> 
 		<col></col> 
 		</colgroup> 
 		<thead>
@@ -632,8 +632,10 @@ function setMaps(lat,lng) {
 		<td><?php echo $R['opentime']."<br><br>".$R['rdate']?></td>
 
 		<td class="mng">
-			<a href="<?php echo $g['s']?>/?r=<?php echo $r?>&amp;m=<?php echo $module?>&amp;a=event_delete&amp;uid=<?php echo $R['uid']?>" onclick="return hrefCheck(this,true,'삭제하시겠습니까?');" class="del">삭제</a>
-			<a href="<?php echo $g['adm_href']?>&uid=<?=$R['uid']?>&p=<?=$p?>&_area1=<?=$_area1?>&_area2=<?=$_area2?>&where=<?=$where?>&keyw=<?=$keyw?>">수정</a>		
+			<a href="<?php echo $g['s']?>/?r=<?php echo $r?>&amp;m=<?php echo $module?>&amp;a=event_delete&amp;uid=<?php echo $R['uid']?>" onclick="return hrefCheck(this,true,'삭제하시겠습니까?');" class="del">삭제</a><br/>
+			<a href="<?php echo $g['adm_href']?>&uid=<?=$R['uid']?>&p=<?=$p?>&_area1=<?=$_area1?>&_area2=<?=$_area2?>&where=<?=$where?>&keyw=<?=$keyw?>">수정</a><br/>
+			<a href="#" class="set-manager" data-ground="<?php echo $R['uid']?>">메니져 지정 </a>	
+
 		</td>
 		<td></td>
 		</tr>
@@ -652,5 +654,79 @@ function setMaps(lat,lng) {
 
 
 </div>
+
+<div id="manager-wrap" class="popup-layer">
+    <p class="tit_bar"></p>
+    <div class="cont_wrap">
+    	<input type="hidden" name="ground_uid" />
+        <div class="pop_title"></div>
+        <div id="cancel" class="no-tab tbl_join" style="padding:30px 0;border-top:0;text-align:center;"> 
+
+            <select name="manager_uid" style="line-height:25px;width:80%;">
+             <option value="">= 메니져를 선택해주세요 =</option>
+             <?php $MCD=getDbSelect($table['s_mbrdata'],'sosok=3','memberuid,sosok,name');?> 
+             <?php while($M=db_fetch_array($MCD)):?>
+               <option value="<?php echo $M['memberuid']?>" ><?php echo $M['name']?></option>
+             <?php endwhile?>
+            </select>
+        </div>   
+        <p style="padding-top: 10px;text-align:center;"><button type="button" class="btnblue" onclick="setManager()" >매니저 지정</button></p>
+    </div>   
+    <p class="close_p"><a href="#" class="close" >닫기 (X)</a></p>
+ </div>   
+ <script>
+ // 메니저 지정 버튼 클릭시 이벤트  
+$('.set-manager').on('click',function(e){
+	e.preventDefault();
+	var ground_uid=$(this).data('ground');
+	var title='골프장 매니져 지정하기';
+    var width=330; var height=200;
+    var layerbox='#manager-wrap'; // 팝업창 1단계 div 
+    $(layerbox).find('input[name="ground_uid"]').val(ground_uid); // 골프장 uid 세팅 
+    $(layerbox).fadeIn(300); // 팝업창 출력 
+    $('.pop_title').text(title); // 제목 출력 
+
+    $(layerbox).css({'display':'table','width' :width,'height' :height}); // 팝업창 넓이와 높이를 먼저 지정해준다.
+    var popMargTop = ($(layerbox).height() + 24) / 4; 
+    var popMargLeft = ($(layerbox).width() + 24) / 2; 
+    $(layerbox).css({ 
+         'margin-top' : -popMargTop,
+         'margin-left' : -popMargLeft,
+     });
+ 
+     $(layerbox).draggable({ handle: "p" }); // css 적용 : .popup-layer p {cursor:move}
+ 
+     // Add the mask to body
+     $('body').append('<div id="mask50" class="mask"></div>');
+     $('#mask50').fadeIn(300);   
+}); 
+
+// 메니져 지정 액션 처리 
+var setManager=function()
+{
+   var layerbox='#manager-wrap'; // 팝업창 1단계 div 
+   var ground_uid=$(layerbox).find('input[name="ground_uid"]').val(); // 골프자 uid 
+   var manager_uid=$(layerbox).find('select[name="manager_uid"]').val();
+   console.log(ground_uid+'-'+manager_uid);
+   if(manager_uid==''){
+       alert('메니져를 선택해주세요. ');
+   	   return false;
+   }
+    $.post(rooturl+'/?r='+raccount+'&m=team&a=setManager',{
+        ground_uid : ground_uid,
+        manager_uid : manager_uid
+    },function(response){
+        location.reload();      
+    });
+	   
+}
+// 팝업창 닫기 
+$('a.close, .mask').on('click', function(e) { 
+	if(e) e.preventDefault();
+    $('.mask, .popup-layer').fadeOut(300 , function() {
+         $('.mask').remove();  
+    }); 
+});		
+ </script>   
 
 
