@@ -93,6 +93,8 @@ function showLogCheck(f) {
 
 function getLogin() {
 	screen_show('loginMessageLayer');
+	//loginViaSocial();
+	//social_login();
 }
 
 function goHistoryBack() {
@@ -181,7 +183,7 @@ function goHistoryBack() {
 				<?if($my['uid']) :?>
 				<h3><?=$my['name']?><?=$my['vip']? '<span class="icon icon-tag-vip">':''?></span></h3>
 				<h4><?=$my['id']?></h4>
-				<h4><a href="/?r=home&a=logout">logout</a></h4>
+				<!-- <h4><a href="/?r=home&a=logout">logout</a></h4>-->
 				<? else :?>
 				<h3>손님입니다.</span></h3>
 				<h4>로그인/회원가입을 해주세요.</h4>
@@ -243,6 +245,11 @@ function goHistoryBack() {
                             <span class="loginicon icon-config"></span><span class="normal-text">설정하기</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="fill-up-space" href="javascript:getMymenuList('manager');">
+                            <span class="loginicon icon-config"></span><span class="normal-text">매니져</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -254,10 +261,10 @@ function goHistoryBack() {
 		</div>
 		<? endif?>
 	</div>
-<? 
+<?
 $submode = (!empty($submode))? $submode:'list';
 
-if($submode == 'list' && $mod != 'mymenu' || $submode == 'search_list') { ?>	
+if($submode == 'list' && $mod != 'mymenu' || $submode == 'search_list' || $submode == 'ranking_all') { ?>	
 	<header class="fix">
 		<div id="">
 			<span id="header-menu"></span>
@@ -265,9 +272,9 @@ if($submode == 'list' && $mod != 'mymenu' || $submode == 'search_list') { ?>
 		</div>
 	</header>
 <? }?>	
-
+<div id="nonMymenu">
 <?php require_once __KIMS_CONTENT__ ?>
-
+</div>
 <script type="text/javascript">
 
 var my_id = '<?=$my['uid']?>';
@@ -285,13 +292,18 @@ if(ButtonMargin > 0) {
 	$("#loginButton").css("margin-top", 0);
 }
 
+//# 메뉴 오픈
 $("#header-menu").on("click", function() {
 	if(my_id !='') {
 		$("#loginBody").css("display",'');
 		$("#loginFooter").css("display",'none');
 	}
+
+	$("#nonMymenu").hide();
 	open_menu();
-	scroll_stop();
+	
+	//scroll_stop();
+
 });
 
 
@@ -300,8 +312,9 @@ $("#loginOverlayClose").on("click", function() {
 });
 
 
-$("#loginHeader").on("click", function() {
+$("#loginOverlay").on("click", function() {
 	close_menu();
+	$("#nonMymenu").show();
 });
 
 
@@ -348,14 +361,15 @@ var close_menu_body = function() {
 
 
 var open_menu = function() {
-	$("#loginOverlay").addClass("active").css("height", 992);
+	$("#loginOverlay").addClass("active").css("height", 994);
+	console.log($("#loginOverlay").height());
 	$("#loginPanel").addClass("active").css("height", 992);
 
 };
 
 var scroll_stop = function() {
 	$(window).scroll(function() {
-		//console.log([$(window).scrollTop(), $(window).height(), $(document).height(), BodyHeight]);
+		console.log([$(window).scrollTop(), $(window).height(), $(document).height(), BodyHeight]);
 		if($(window).scrollTop() + $(window).height() >= BodyHeight) {
 			//$("body").scrollTop(230);
 		}
@@ -379,6 +393,7 @@ var close_panel = function() {
 
 var social_login = function(sel) {
 	close_panel();
+	$("#loginOverlay").addClass("active").css("height", 994);
 	$("#loginViaSocial").addClass("active");
 };
 
@@ -440,32 +455,3 @@ function getUuid(_succFn){
 getUuid("resultSuccess");
 <?php endif?>
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
