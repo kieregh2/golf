@@ -13,14 +13,11 @@ if ($g['use_social'])
 	//$_isModal = true;
 	include $g['path_module'].$g['mdl_slogin'].'/lang.korean/action/a.slogin.check.php';
 }
-
-
 ?>
 
 <script type="text/javascript" src="jquery-1.12.3.min.js"></script>
 <script type='text/javascript' src='/_core/js/jquery-ui/jquery-ui.min.js'></script>
 <link type="text/css" rel="stylesheet" charset="utf-8" href="/_core/js/jquery-ui/jquery-ui.min.css"/>
-
 
 <!--  script start -->
  
@@ -138,7 +135,8 @@ function goHistoryBack() {
 		<span id="loginOverlayClose" class="icon icon-whitex"></span>
         <?php foreach($g['snskor'] as $key => $val):?>
 		<?php if(!$d[$g['mdl_slogin']]['use_'.$key])continue?>
-		<div id="<?php echo $val[1]?>Login" class="socialLoginButton" onclick="window.open('<?php echo $slogin[$val[1]]['callapi']?>','','width=<?php echo $val[2]?>px,height=<?php echo $val[3]?>px,status=no,scrollbars=no,resizeable=no');"></div>
+		<div id="<?php echo $val[1]?>Login" class="socialLoginButton" data-role="social-login" data-connect="<?php echo $slogin[$val[1]]['callapi']?>">
+		</div>
 		<?php endforeach?>
 		
 		<h3>이메일 로그인</h3>
@@ -174,12 +172,13 @@ function goHistoryBack() {
 		<div id="maybeNexttimeBox">
 			<span id="maybeNexttime">다음에 할께요</span>
 		</div>
+
 	</div>
 
 	<div id="loginPanel" >
 		<div id="loginHeader">
 			<div id="loginInfomation">
-				<span id="loginThumbnail"></span>
+				<img src="<?php echo getMyPicSrc($my['uid'])?>" id="loginThumbnail"/>
 				<?if($my['uid']) :?>
 				<h3><?=$my['name']?><?=$my['vip']? '<span class="icon icon-tag-vip">':''?></span></h3>
 				<h4><?=$my['id']?></h4>
@@ -245,11 +244,13 @@ function goHistoryBack() {
                             <span class="loginicon icon-config"></span><span class="normal-text">설정하기</span>
                         </a>
                     </li>
+                    <?php if($my['sosok']==3):?>
                     <li>
                         <a class="fill-up-space" href="javascript:getMymenuList('manager');">
                             <span class="loginicon icon-config"></span><span class="normal-text">매니져</span>
                         </a>
                     </li>
+                   <?php endif?>
                 </ul>
             </div>
 
@@ -275,8 +276,23 @@ if($submode == 'list' && $mod != 'mymenu' || $submode == 'search_list' || $submo
 <div id="nonMymenu">
 <?php require_once __KIMS_CONTENT__ ?>
 </div>
-<script type="text/javascript">
 
+<!--소셜 로그인 모달 -->
+<div class="modal" id="modal-slogin">
+	<div class="normal-background dim-gray-bg" style="height:100%;">
+       <iframe name="_action_frame_slogin" height="100%" width="100%" frameborder="0" scrolling="yes"></iframe>   
+    </div>
+</div>
+<script type="text/javascript">
+// 소셜 로그인 함수 추가 
+$(document).on('click','[data-role="social-login"]',function(){
+    var connectUrl=$(this).data('connect');
+    frames._action_frame_slogin.location.href = connectUrl;
+    $('#modal-slogin').addClass('active');
+    //$('#modal-slogin').css('top',"101px");
+    $('#modal-slogin').show();
+
+});
 var my_id = '<?=$my['uid']?>';
 var BodyHeight = $("body").height();
 var LoginHeaderHeight = $("#loginHeader").height();
@@ -423,7 +439,7 @@ function getData() {
 */
 
 // 디바이스 정보 업데이트 
-function resultSuccess(datas){
+function updateDevice(datas){
     var dts = $.parseJSON(datas);
     var regid = dts.regid;
     var uuid  = dts.uuid;
@@ -439,6 +455,17 @@ function resultSuccess(datas){
 	}); 
     
 }
+// 디바이스 체크 함수  
+function checkDevice(datas){
+    var dts = $.parseJSON(datas);
+    var now_device_id  = dts.uuid;
+    var my_device_id='<?php echo $my['deviceid']?>';
+    
+    if(my_device_id=='') getUuid("updateDevice"); // deviceid 가 없는 경우 
+    else {
+        if(my_device_id!=now_device_id) getUuid("updateDevice"); // 기존 diviceid 값과 다른 경우 
+    } 
+}
 
 function resultFail(){
    alert('fail');
@@ -451,7 +478,15 @@ function getUuid(_succFn){
    Hybrid.exe('HybridIf.getUuid', param);
 
 }
-<?php if($my['uid']&&!$my['deviceid']):?>
-getUuid("resultSuccess");
+// 디바이스 세팅 함수 
+function setUuid(_succFn){
+   var param = {
+      succFn : _succFn // Succ Fn name
+   };
+   Hybrid.exe('HybridIf.getUuid', param);
+
+}
+<?php if($my['uid']):?>
+setUuid("checkDevice"); // 디바이스 체크함수를 호출
 <?php endif?>
 </script>
