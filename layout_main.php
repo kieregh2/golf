@@ -300,31 +300,30 @@ var ButtonMargin = ((window.outerHeight - LoginHeaderHeight) / 2) - 100;
 
 
 $("#loginPanel").css("height", BodyHeight);
-$("#loginFooter").css("height", BodyHeight - LoginHeaderHeight);
-
+//$("#loginFooter").css("height", BodyHeight - LoginHeaderHeight);
+$("#loginFooter").css("height", "615px");
 if(ButtonMargin > 0) {
 	$("#loginButton").css("margin-top", ButtonMargin);
 } else {
 	$("#loginButton").css("margin-top", 0);
 }
-
-//# 메뉴 오픈
+//# 헤더메뉴 오픈
 $("#header-menu").on("click", function() {
+	header_menu()
+});
+function header_menu () {
 	if(my_id !='') {
 		$("#loginBody").css("display",'');
 		$("#loginFooter").css("display",'none');
 	}
-
 	$("#nonMymenu").hide();
-	open_menu();
-	
-	//scroll_stop();
-
-});
-
-
-$("#loginOverlayClose").on("click", function() {
+	open_menu();	
+}
+$("#loginOverlayClose, #maybeNexttime").on("click", function() {
 	close_social_login();
+	close_menu();
+	$("#goLoginOverlay").removeClass("active");
+	$("#nonMymenu").show();	
 });
 
 
@@ -355,7 +354,6 @@ var getMymenuList = function(submode, detailmode) {
 	//alert(1);
 	submode    = submode    || '';
 	detailmode = detailmode || '';
-
 	//console.log([submode,detailmode]);
 	
 	if($("#myMenuOverlay").length <= 0) { 
