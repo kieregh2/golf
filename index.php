@@ -1,11 +1,4 @@
 <?php
-//echo $_SERVER["REQUEST_URI"];
-/*
-if($_SERVER["REQUEST_URI"] === "/") {
-	header("Location: http://".$_SERVER["HTTP_HOST"]."/?mod=rounge");
-	exit;
-}
-*/
 header("Content-type:text/html;charset=utf-8");
 define('__KIMS__',true);
 error_reporting(E_ALL ^ E_NOTICE);
@@ -119,7 +112,9 @@ foreach($g['switch_1'] as $_switch) include $_switch;
 if ($m!='admin'){include $g['path_var'].'sitephp/'.$_HS['uid'].'.php';if($_HS['buffer']){$g['buffer']=true;ob_start('ob_gzhandler');}}
 
 ?>
-
+<?php if($load=='Y'):?>
+	<?php require_once __KIMS_CONTENT__ ?>
+<?php else:?>
 	<!DOCTYPE html>
 	<html lang="<?php echo $lang['sys']['lang']?>">
 	<head>
@@ -137,6 +132,7 @@ if ($m!='admin'){include $g['path_var'].'sitephp/'.$_HS['uid'].'.php';if($_HS['b
 	<meta property="og:url" content="http://<?=$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']?>">
 	<meta property="og:title" content="<?=($R['subject'])?$R['subject']:$R['name']?>">
 	<meta property="og:description" content="<?=strip_tags($R['content'])?>">	
+	<script type="text/javascript" src="jquery-1.12.3.min.js"></script>
 	<?php require $g['path_core'].'engine/cssjs.engine.php'?>
 	</head>
 	<body style='background:#f3f3f3;padding:0;margin:0;'>
@@ -145,9 +141,7 @@ if ($m!='admin'){include $g['path_var'].'sitephp/'.$_HS['uid'].'.php';if($_HS['b
 	<?php include $g['path_core'].'engine/adminbar.engine.php'?>
 	<?php endif?>
 
-
-  <?php include $g['path_layout'].$d['layout']['php']?>
-
+    <?php include $g['path_layout'].$d['layout']['php']?>
 
 	<?php if($g['mobile']&&$_SESSION['pcmode']=='Y'&&$iframe!='Y'):?>
 	<div id="pctomobile"><a href="<?php echo $g['s']?>/?r=<?php echo $r?>&amp;a=mobilemode"><?php echo sprintf($lang['sys']['viewpcmode'],$m=='admin'?$lang['top']['adminmode']:$lang['top']['homepage'])?></a></div>
@@ -171,5 +165,9 @@ if ($m!='admin'){include $g['path_var'].'sitephp/'.$_HS['uid'].'.php';if($_HS['b
 	<?php foreach($g['switch_4'] as $_switch) include $_switch?>
 	<?php if($g['widget_cssjs']) include $g['path_core'].'engine/widget.cssjs.php'?>
 	<?php if($g['buffer']) ob_end_flush()?>
+
+<?php endif?>
+	
+	
 
 

@@ -12,7 +12,8 @@ if ($g['use_social'])
 	include $g['path_module'].$g['mdl_slogin'].'/lang.korean/action/a.slogin.check.php';
 }
 ?>
-<script type="text/javascript" src="jquery-1.12.3.min.js"></script>
+
+
 <script type='text/javascript' src='/_core/js/jquery-ui/jquery-ui.min.js'></script>
 <link type="text/css" rel="stylesheet" charset="utf-8" href="/_core/js/jquery-ui/jquery-ui.min.css"/>
 <!--  script start -->
@@ -167,54 +168,54 @@ function goHistoryBack() {
             <div id="loginBody">
                 <ul>
                     <li>
-                        <a class="fill-up-space" href="javascript:getMymenuList('game');">
+                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="game">
                             <span class="loginicon icon-golfer"></span><span class="normal-text">나의 경기</span>
                         </a>                        
                     </li>
                     <li>
-                        <a class="fill-up-space" href="javascript:getMymenuList('friends');">
+                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="friends">
                             <span class="loginicon icon-friends"></span><span class="normal-text">친구</span>
                         </a>
                     </li>
                     <li>
-                        <a class="fill-up-space" href="javascript:getMymenuList('saving');">
+                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="saving">
                             <span class="loginicon icon-database"></span><span class="normal-text">적립현황</span>
                         </a>
                     </li>
                     <li>
-                        <a class="fill-up-space" href="javascript:getMymenuList('wishlist');">
+                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="wishlist">
                             <span class="loginicon icon-heart-big"></span><span class="normal-text">찜 내역</span>
                         </a>
                     </li>
                     <li>
-                        <a class="fill-up-space" href="javascript:getMymenuList('coupon');">
+                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="coupon">
                             <span class="loginicon icon-coupon"></span><span class="normal-text">나의 쿠폰보기</span>
                         </a>
                     </li>
                     <li>
-                        <a class="fill-up-space" href="javascript:getMymenuList('review');">
+                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="review">
                             <span class="loginicon icon-pen"></span><span class="normal-text">리뷰쓰기</span>
                         </a>
                     </li>
                     <li>
-                        <a class="fill-up-space" href="javascript:getMymenuList('bill');">
+                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="bill">
                             <span class="loginicon icon-wallet"></span><span class="normal-text">결제현황</span>
                         </a>
                     </li>
                     <li>
-                        <a class="fill-up-space" href="javascript:getMymenuList('timeline');">
+                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="timeline">
                         <!-- <a class="fill-up-space" href="/?mod=mymenu&submode=timeline"> -->
                             <span id="mymenuTimelineList" class="loginicon icon-timeline"></span><span class="normal-text">타임라인</span>
                         </a>
                     </li>
                     <li>
-                        <a class="fill-up-space" href="javascript:getMymenuList('setting');">
+                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="setting">
                             <span class="loginicon icon-config"></span><span class="normal-text">설정하기</span>
                         </a>
                     </li>
                     <?php if($my['sosok']==3):?>
                     <li>
-                        <a class="fill-up-space" href="javascript:getMymenuList('manager');">
+                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="manager">
                             <span class="loginicon icon-config"></span><span class="normal-text">매니져</span>
                         </a>
                     </li>
@@ -242,20 +243,35 @@ if(($submode == 'list' && $mod != 'mymenu' || $submode == 'search_list' || $subm
 <div id="nonMymenu">
 <?php require_once __KIMS_CONTENT__ ?>
 </div>
-<!--소셜 로그인 모달 -->
-<div class="modal" id="modal-slogin">
-	<div class="normal-background dim-gray-bg" style="height:100%;">
-       <iframe name="_action_frame_slogin" height="100%" width="100%" frameborder="0" scrolling="yes"></iframe>   
+<!--vip 모달 -->
+<div class="modal" id="modal-vip">
+	<div class="normal-background dim-gray-bg">
+
     </div>
 </div>
+<!--mymenu 모달 -->
+<div class="modal" id="modal-mymenu">
+    <header class="fix">
+         <div id="header-colored">
+             <div id="header-left">
+	                <a href="#" data-dismiss="modals"><span class="icon icon-backward"></span></a>
+            </div>
+            <div id="header-center" data-role="title"></div>
+        </div>
+    </header>
+    <div class="content" data-role="content"><!-- mymenu 내용 --> </div>
+</div>
+
 <script type="text/javascript">
 // 소셜 로그인 함수 추가 
 $(document).on('click','[data-role="social-login"]',function(){
     var connectUrl=$(this).data('connect');
-    frames._action_frame_slogin.location.href = connectUrl;
-    $('#modal-slogin').addClass('active');
+    //frames._action_frame_slogin.location.href = connectUrl;
+    location.href = connectUrl;
+    
+    //$('#modal-slogin').addClass('active');
     //$('#modal-slogin').css('top',"101px");
-    $('#modal-slogin').show();
+    //$('#modal-slogin').show();
 });
 var my_id = '<?=$my['uid']?>';
 var BodyHeight = $("body").height();
@@ -314,10 +330,27 @@ var getMymenuList = function(submode, detailmode) {
 		//alert(2);
 		$(document.body).append('<div id="myMenuOverlay"></div>');
 	}
-	$("#myMenuOverlay").load('/?mod=mymenu&submode='+submode+'&detailmode='+detailmode);
+	$("#myMenuOverlay").load('/?mod=mymenu&submode='+submode+'&detailmode='+detailmode+'&load=Y');
+	setMymenuTitle(submode,detailmode);
 	$(window).resize();
 	window.scrollTo(0, 0);
 }
+
+// 마이메뉴 모달 오픈 
+$('[data-role="mymenu-item"]').on('click',function(e){
+	e.preventDefault();
+	var modal=$('#modal-mymenu');
+    var submode=$(this).data('menu');
+    var detailmode='';
+	var title=getMyMenuTitle(submode,detailmode);
+    var url='/?mod=mymenu&submode='+submode;
+    $(modal).find('.content').load('/?mod=mymenu&submode='+submode+'&detailmode='+detailmode+'&load=Y');
+    $('#modal-mymenu').modals({
+       title : title,
+       url : url
+    }); 
+})
+
 var close_menu_body = function() {
 	$("#myMenuOverlay").remove();
 	$("#myMenuOverlay").remove();
@@ -422,3 +455,34 @@ function setUuid(_succFn){
 setUuid("checkDevice"); // 디바이스 체크함수를 호출
 <?php endif?>
 </script>
+
+<!-- 마이메뉴 load 할때 타이틀 세팅 스크립트 추가 -->
+<script>
+var getMyMenuTitle=function(submode,detailmode) {
+    var title;
+
+	if(submode == 'friends') title="친구";
+	else if(submode == 'game') title="나의경기";
+	else if(submode == 'game.view') title="나의경기";
+	else if(submode == 'saving') title="적립현황";
+	else if(submode == 'wishlist') title="찜내역";
+	else if(submode == 'coupon') title="나의 쿠폰보기";
+	else if(submode == 'review' || submode == 'review.rounge.view' || submode == 'review.myteam.view') title="리뷰쓰기";
+	else if(submode == 'bill') title="결제현황";
+	else if(submode == 'timeline') title="타임라인";
+	else if(submode == 'setting') title="설정하기";
+	else if(submode == 'setting.profile') title="설정하기";
+	else if(submode == 'manager' 
+		|| 	submode == 'manager.schedule.rounge'
+		|| 	submode == 'manager.schedule.time'
+		|| 	submode == 'manager.request'
+		||  submode == 'manager.confirm'
+		||  submode == 'manager.cancel') {
+		title="매니져";
+	}
+
+	return title;	
+
+}
+</script>
+
