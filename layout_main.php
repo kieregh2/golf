@@ -1,10 +1,8 @@
 <?php
 // 디바이스 정보 업데이트 
 //include_once $g['path_layout'].$d['layout']['dir'].'/_lib/app_setting.php';
-
 $areaList = getArea(); 
 $reverseAreaList = getReverseArea($areaList);
-
 // 소셜로그인 추가 
 $g['mdl_slogin'] = 'sociallogin';
 $g['use_social'] = is_file($g['path_module'].$g['mdl_slogin'].'/var/var.php');
@@ -14,15 +12,12 @@ if ($g['use_social'])
 	include $g['path_module'].$g['mdl_slogin'].'/lang.korean/action/a.slogin.check.php';
 }
 ?>
-
 <script type="text/javascript" src="jquery-1.12.3.min.js"></script>
 <script type='text/javascript' src='/_core/js/jquery-ui/jquery-ui.min.js'></script>
 <link type="text/css" rel="stylesheet" charset="utf-8" href="/_core/js/jquery-ui/jquery-ui.min.css"/>
-
 <!--  script start -->
  
 <script>
-
 var deviceId = localStorage.getItem("deviceid");
 var token	 = localStorage.getItem("token");
 var dev		 = localStorage.getItem("dev");
@@ -31,7 +26,6 @@ var marea1code = localStorage.getItem("marea1code");
 var marea1name = localStorage.getItem("marea1name");
 var marea2code = localStorage.getItem("marea2code");
 var marea2name = localStorage.getItem("marea2name");
-
 if(marea1code == null)marea1code = '';
 if(marea1name == null)marea1name = '';
 if(marea2code == null)marea2code = '';
@@ -39,9 +33,7 @@ if(marea2name == null)marea2name = '';
 */
 var areaList = <?=json_encode($areaList)?>;
 	
-
 <?php if(!$my['uid']):?>
-
 if(deviceId) {
 	$.post("/proc/proc.ajax.php", { "mode": "login","deviceid": deviceId},  
 		function (ret) {
@@ -56,16 +48,13 @@ function getPageMove(url) {
  }	
  	
 </script>
-
 <!-- <div id="screenLayer" style="width:100%;background:black;filter:alpha(opacity=75); opacity:0.75; z-index:11111111;display:none;position:absolute;"></div> -->
 <?php include_once $_SERVER['DOCUMENT_ROOT'].'/modules/team/var/var.fixed.php';?>
-
 <script>
 function goLogin() {
 	getPageMove('/?mod=login');
 }
 </script>
-
 <script type="text/javascript">
 //<![CDATA[
 function showLogCheck(f) {
@@ -81,21 +70,15 @@ function showLogCheck(f) {
 		f.pw.focus();
 		return false;
 	}
-
 	f.referer.value = '<?php echo urldecode($referer)?>';
 	f.submit();
 }
-
-
-
 function getLogin() {
 	screen_show('loginMessageLayer');
 	//loginViaSocial();
 	//social_login();
 }
-
 function goHistoryBack() {
-
 	<?php if($_GET['mod']=='payment'):?>
 	
 		history.go(-1);
@@ -114,22 +97,15 @@ function goHistoryBack() {
 	
 	<?php elseif($_GET['mod'] && $_GET['uid'] && $_GET['amode']):?>
 		location.href='/?mod=<?php echo $_GET["mod"]?>&submode=<?php echo $_GET["amode"]?>&agecode=<?php echo $_GET["agecode"]?>';
-
 	<?php else:?>
 		history.go(-1);
 	<?php endif?>
 }
-
-
 </script>
-
 <iframe name='hiddemFramePaper' style='display:none;'></iframe>
 <div id='_allLayoutBox_' style='background:#f3f3f3;'>
-
 </div>
-
 <!--  script end -->
-
 	<div id="loginOverlay"></div>
 	<div id="loginViaSocial">
 		<span id="loginOverlayClose" class="icon icon-whitex"></span>
@@ -151,7 +127,7 @@ function goHistoryBack() {
 			<input id="password" name="pw" type="password" value="<?php echo getArrayCookie($_COOKIE['svshop'],'|',1)?>" title="패스워드" placeholder="비밀번호" />
 		</div>
 		<div id="findPasswordBox">
-			<span id="findPassword">비밀번호 찾기</span>
+			<a href="<?php echo $g['s']?>/?m=member&amp;front=login&amp;page=idpwsearch"><span id="findPassword">비밀번호 찾기</span></a>
 		</div>
 		
 		<div id="login" class="socialLoginButton">로그인</div>
@@ -172,9 +148,7 @@ function goHistoryBack() {
 		<div id="maybeNexttimeBox">
 			<span id="maybeNexttime">다음에 할께요</span>
 		</div>
-
 	</div>
-
 	<div id="loginPanel" >
 		<div id="loginHeader">
 			<div id="loginInfomation">
@@ -208,38 +182,32 @@ function goHistoryBack() {
                         </a>
                     </li>
                     <li>
-
                         <a class="fill-up-space" href="javascript:getMymenuList('wishlist');">
                             <span class="loginicon icon-heart-big"></span><span class="normal-text">찜 내역</span>
                         </a>
                     </li>
                     <li>
-
                         <a class="fill-up-space" href="javascript:getMymenuList('coupon');">
                             <span class="loginicon icon-coupon"></span><span class="normal-text">나의 쿠폰보기</span>
                         </a>
                     </li>
                     <li>
-
                         <a class="fill-up-space" href="javascript:getMymenuList('review');">
                             <span class="loginicon icon-pen"></span><span class="normal-text">리뷰쓰기</span>
                         </a>
                     </li>
                     <li>
-
                         <a class="fill-up-space" href="javascript:getMymenuList('bill');">
                             <span class="loginicon icon-wallet"></span><span class="normal-text">결제현황</span>
                         </a>
                     </li>
                     <li>
-
                         <a class="fill-up-space" href="javascript:getMymenuList('timeline');">
                         <!-- <a class="fill-up-space" href="/?mod=mymenu&submode=timeline"> -->
                             <span id="mymenuTimelineList" class="loginicon icon-timeline"></span><span class="normal-text">타임라인</span>
                         </a>
                     </li>
                     <li>
-
                         <a class="fill-up-space" href="javascript:getMymenuList('setting');">
                             <span class="loginicon icon-config"></span><span class="normal-text">설정하기</span>
                         </a>
@@ -253,7 +221,6 @@ function goHistoryBack() {
                    <?php endif?>
                 </ul>
             </div>
-
 		<? else :?>		
 		<div id="loginFooter">
 			<span id="loginButton">
@@ -264,8 +231,7 @@ function goHistoryBack() {
 	</div>
 <?
 $submode = (!empty($submode))? $submode:'list';
-
-if($submode == 'list' && $mod != 'mymenu' || $submode == 'search_list' || $submode == 'ranking_all') { ?>	
+if(($submode == 'list' && $mod != 'mymenu' || $submode == 'search_list' || $submode == 'ranking_all') && $m!='member') { ?>	
 	<header class="fix">
 		<div id="">
 			<span id="header-menu"></span>
@@ -276,7 +242,6 @@ if($submode == 'list' && $mod != 'mymenu' || $submode == 'search_list' || $submo
 <div id="nonMymenu">
 <?php require_once __KIMS_CONTENT__ ?>
 </div>
-
 <!--소셜 로그인 모달 -->
 <div class="modal" id="modal-slogin">
 	<div class="normal-background dim-gray-bg" style="height:100%;">
@@ -291,14 +256,11 @@ $(document).on('click','[data-role="social-login"]',function(){
     $('#modal-slogin').addClass('active');
     //$('#modal-slogin').css('top',"101px");
     $('#modal-slogin').show();
-
 });
 var my_id = '<?=$my['uid']?>';
 var BodyHeight = $("body").height();
 var LoginHeaderHeight = $("#loginHeader").height();
 var ButtonMargin = ((window.outerHeight - LoginHeaderHeight) / 2) - 100;
-
-
 $("#loginPanel").css("height", BodyHeight);
 //$("#loginFooter").css("height", BodyHeight - LoginHeaderHeight);
 $("#loginFooter").css("height", "615px");
@@ -325,29 +287,21 @@ $("#loginOverlayClose, #maybeNexttime").on("click", function() {
 	$("#goLoginOverlay").removeClass("active");
 	$("#nonMymenu").show();	
 });
-
-
 $("#loginOverlay").on("click", function() {
 	close_menu();
 	$("#nonMymenu").show();
 });
-
-
 $("#loginButton").on("click", function() {
 	social_login();
 });
-
-
 $("#login").on("click", function() {
 	$("#LayoutLogForm").submit();
 });
-
 $(window).resize(function() {
 	//alert(1);
     $('#myMenuOverlay').height($(window).height());
     //$(document.body).height("100");
 });
-
 /*mymenu list */
 var getMymenuList = function(submode, detailmode) {
 	close_menu();
@@ -361,26 +315,19 @@ var getMymenuList = function(submode, detailmode) {
 		$(document.body).append('<div id="myMenuOverlay"></div>');
 	}
 	$("#myMenuOverlay").load('/?mod=mymenu&submode='+submode+'&detailmode='+detailmode);
-
 	$(window).resize();
 	window.scrollTo(0, 0);
-
 }
 var close_menu_body = function() {
 	$("#myMenuOverlay").remove();
 	$("#myMenuOverlay").remove();
 }
-
 /*mymenu end */
-
-
 var open_menu = function() {
 	$("#loginOverlay").addClass("active").css("height", 994);
 	console.log($("#loginOverlay").height());
 	$("#loginPanel").addClass("active").css("height", 992);
-
 };
-
 var scroll_stop = function() {
 	$(window).scroll(function() {
 		console.log([$(window).scrollTop(), $(window).height(), $(document).height(), BodyHeight]);
@@ -389,37 +336,29 @@ var scroll_stop = function() {
 		}
 	});
 };
-
-
 var close_menu = function() {
 	close_panel();
 	$("#loginOverlay").css("height", 0);
 	//console.log(1);
 	$("#loginOverlay").removeClass("active");
-
 };
-
 var close_panel = function() {
 	if($("#loginPanel").hasClass("active")) {
 		$("#loginPanel").removeClass("active");
 	}
 };
-
 var social_login = function(sel) {
 	close_panel();
 	$("#loginOverlay").addClass("active").css("height", 994);
 	$("#loginViaSocial").addClass("active");
 };
-
 var close_social_login = function(sel) {
 	open_menu();
 	$("#loginViaSocial").removeClass("active");
 };
-
 var test1 = function() {
 	alert(1);
 }
-
 /*
 $(window).scroll(function() {
    //if($(window).scrollTop() + $(window).height() == $(document).height()) {
@@ -435,7 +374,6 @@ function getData() {
     })
 };
 */
-
 // 디바이스 정보 업데이트 
 function updateDevice(datas){
     var dts = $.parseJSON(datas);
@@ -464,17 +402,14 @@ function checkDevice(datas){
         if(my_device_id!=now_device_id) getUuid("updateDevice"); // 기존 diviceid 값과 다른 경우 
     } 
 }
-
 function resultFail(){
    alert('fail');
 }
-
 function getUuid(_succFn){
    var param = {
       succFn : _succFn // Succ Fn name
    };
    Hybrid.exe('HybridIf.getUuid', param);
-
 }
 // 디바이스 세팅 함수 
 function setUuid(_succFn){
@@ -482,7 +417,6 @@ function setUuid(_succFn){
       succFn : _succFn // Succ Fn name
    };
    Hybrid.exe('HybridIf.getUuid', param);
-
 }
 <?php if($my['uid']):?>
 setUuid("checkDevice"); // 디바이스 체크함수를 호출
