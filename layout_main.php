@@ -12,37 +12,40 @@ if ($g['use_social'])
 	include $g['path_module'].$g['mdl_slogin'].'/lang.korean/action/a.slogin.check.php';
 }
 ?>
+<style>
+.overflow-auto {overflow:auto;height:98%;}
+.overflow-hidden {overflow:hidden;}
+#loginPanel {
+    width: 92%;
+    height: 100%;
+    background-color: #fff;
+    position: absolute;
+    top: 0px;
+    left: -92%;
+    z-index: 10;
+    -webkit-transition: all .25s;
+    -o-transition: all .25s;
+    transition: all .25s;
+}
+#loginPanel.active {
+    left: 0px;
+    height: 100%;
+    z-index: 15;
+    -webkit-transition: all .25s;
+    -o-transition: all .25s;
+    transition: all .25s;
+}
+#loginOverlay.active {z-index: 12}
 
+</style>
 
 <script type='text/javascript' src='/_core/js/jquery-ui/jquery-ui.min.js'></script>
 <link type="text/css" rel="stylesheet" charset="utf-8" href="/_core/js/jquery-ui/jquery-ui.min.css"/>
 <!--  script start -->
  
 <script>
-var deviceId = localStorage.getItem("deviceid");
-var token	 = localStorage.getItem("token");
-var dev		 = localStorage.getItem("dev");
-/*
-var marea1code = localStorage.getItem("marea1code");
-var marea1name = localStorage.getItem("marea1name");
-var marea2code = localStorage.getItem("marea2code");
-var marea2name = localStorage.getItem("marea2name");
-if(marea1code == null)marea1code = '';
-if(marea1name == null)marea1name = '';
-if(marea2code == null)marea2code = '';
-if(marea2name == null)marea2name = '';
-*/
 var areaList = <?=json_encode($areaList)?>;
-	
-<?php if(!$my['uid']):?>
-if(deviceId) {
-	$.post("/proc/proc.ajax.php", { "mode": "login","deviceid": deviceId},  
-		function (ret) {
-			if(ret=='succ')document.location.reload();  
-	
-	});  
-}
-<?php endif?>
+
 function getPageMove(url) {
 	
  	location.href = url;
@@ -151,7 +154,7 @@ function goHistoryBack() {
 		</div>
 	</div>
 	<div id="loginPanel" >
-		<div id="loginHeader">
+		<div id="loginHeader" style="position:fixed;width:92%;">
 			<div id="loginInfomation">
 				<img src="<?php echo getMyPicSrc($my['uid'])?>" id="loginThumbnail"/>
 				<?if($my['uid']) :?>
@@ -165,7 +168,7 @@ function goHistoryBack() {
 			</div>
 		</div>
 		<?if($my['uid']) :?>
-            <div id="loginBody">
+            <div id="loginBody" style="overflow-y:auto;height:65%;margin-top:300px;">
                 <ul>
                     <li>
                         <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="game">
@@ -233,21 +236,29 @@ function goHistoryBack() {
 <?
 $submode = (!empty($submode))? $submode:'list';
 if(($submode == 'list' && $mod != 'mymenu' || $submode == 'search_list' || $submode == 'ranking_all') && $m!='member') { ?>	
-	<header class="fix">
+	<header class="fix" style="position:fixed;top:0;width:100%;z-index:11;background:#fff;">
 		<div id="">
 			<span id="header-menu"></span>
 			<span id="header-title"></span>
 		</div>
 	</header>
 <? }?>	
-<div id="nonMymenu">
-<?php require_once __KIMS_CONTENT__ ?>
-</div>
-<!--vip 모달 -->
-<div class="modal" id="modal-vip">
-	<div class="normal-background dim-gray-bg">
+<?php
+$contentMarginTop='';
+if($mod=='rounge'||!$mod){
+   if($submode=='list') $contentMarginTop=37;
+   else $contentMarginTop=0;	
+}
+else if($mod=='booking'|| $mod=='matching'||$mod=='event'){
 
-    </div>
+   if($submode=='list' || $submode=='ranking_all') $contentMarginTop=53;
+   else $contentMarginTop=0;	
+}
+else if($mod=='mymenu') $contentMarginTop=78;	
+?>
+
+<div id="nonMymenu" style="margin-top:<?php echo $contentMarginTop?>px">
+<?php require_once __KIMS_CONTENT__ ?>
 </div>
 <!--mymenu 모달 -->
 <div class="modal" id="modal-mymenu">
@@ -263,15 +274,12 @@ if(($submode == 'list' && $mod != 'mymenu' || $submode == 'search_list' || $subm
 </div>
 
 <script type="text/javascript">
-// 소셜 로그인 함수 추가 
+
+// 소셜 로그인 실행  
 $(document).on('click','[data-role="social-login"]',function(){
     var connectUrl=$(this).data('connect');
     //frames._action_frame_slogin.location.href = connectUrl;
     location.href = connectUrl;
-    
-    //$('#modal-slogin').addClass('active');
-    //$('#modal-slogin').css('top',"101px");
-    //$('#modal-slogin').show();
 });
 var my_id = '<?=$my['uid']?>';
 var BodyHeight = $("body").height();
@@ -336,16 +344,18 @@ var getMymenuList = function(submode, detailmode) {
 	window.scrollTo(0, 0);
 }
 
+// 공통으로 사용 : 모달 오픈시 & 좌측메뉴 열고 닫을 때 
+var mymenu_modal=$('#modal-mymenu');
+
 // 마이메뉴 모달 오픈 
 $('[data-role="mymenu-item"]').on('click',function(e){
 	e.preventDefault();
-	var modal=$('#modal-mymenu');
     var submode=$(this).data('menu');
     var detailmode='';
 	var title=getMyMenuTitle(submode,detailmode);
     var url='/?mod=mymenu&submode='+submode;
-    $(modal).find('.content').load('/?mod=mymenu&submode='+submode+'&detailmode='+detailmode+'&load=Y');
-    $('#modal-mymenu').modals({
+    $(mymenu_modal).find('.content').load('/?mod=mymenu&submode='+submode+'&detailmode='+detailmode+'&load=Y');
+    $(mymenu_modal).modals({
        title : title,
        url : url
     }); 
@@ -358,8 +368,11 @@ var close_menu_body = function() {
 /*mymenu end */
 var open_menu = function() {
 	$("#loginOverlay").addClass("active").css("height", 994);
-	console.log($("#loginOverlay").height());
 	$("#loginPanel").addClass("active").css("height", 992);
+
+	// 백그라운드 content 의 scroll 환경 제거 
+	$('.section-body').css('height',0);
+	$('.section-body').removeClass('overflow-auto').addClass('overflow-hidden'); 
 };
 var scroll_stop = function() {
 	$(window).scroll(function() {
@@ -372,8 +385,12 @@ var scroll_stop = function() {
 var close_menu = function() {
 	close_panel();
 	$("#loginOverlay").css("height", 0);
-	//console.log(1);
 	$("#loginOverlay").removeClass("active");
+
+	// 백그라운드 content 의 scroll 환경 복구  
+	$('.section-body').css('height','90%');
+	$('.section-body').addClass('overflow-auto').removeClass('overflow-hidden');
+	//$('.section-body').scrollTop()=0; 
 };
 var close_panel = function() {
 	if($("#loginPanel").hasClass("active")) {
