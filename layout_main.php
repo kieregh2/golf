@@ -16,31 +16,38 @@ if ($g['use_social'])
 .overflow-auto {overflow:auto;height:98%;}
 .overflow-hidden {overflow:hidden;}
 #loginPanel {
-    width: 92%;
-    height: 100%;
-    background-color: #fff;
-    position: absolute;
-    top: 0px;
-    left: -92%;
-    z-index: 10;
+    z-index: 21;
     -webkit-transition: all .25s;
     -o-transition: all .25s;
     transition: all .25s;
 }
 #loginPanel.active {
-    left: 0px;
-    height: 100%;
-    z-index: 15;
+    z-index: 21;
     -webkit-transition: all .25s;
     -o-transition: all .25s;
     transition: all .25s;
 }
-#loginOverlay.active {z-index: 12}
-
+#loginOverlay.active {z-index: 15 !important}
+#loginViaSocial.active {z-index: 20 !important}
+.affix {position: fixed;z-index: 10;width:100%;}
+.affix-top, .affix-bottom {z-index: 10}
 </style>
+<!--메인 메뉴 padding-top 동적 세팅 --> 
+<?php if($mod=='rounge'||!$mod):?>
+<style>	
+.affix {top:55px;}
+#content .menu-strip.plainmode {padding-top:0px !important;margin-top: -1px !important;}
+</style>
+<?php else:?>
+<style>	
+.affix {top:43px;}
+#content .menu-strip.plainmode {padding-top:12px !important;}
+</style>
+<?php endif?>	
 
 <script type='text/javascript' src='/_core/js/jquery-ui/jquery-ui.min.js'></script>
 <link type="text/css" rel="stylesheet" charset="utf-8" href="/_core/js/jquery-ui/jquery-ui.min.css"/>
+<script type='text/javascript' src='/layouts/mobile/_rc/rc-min.js'></script>
 <!--  script start -->
  
 <script>
@@ -111,7 +118,7 @@ function goHistoryBack() {
 </div>
 <!--  script end -->
 	<div id="loginOverlay"></div>
-	<div id="loginViaSocial">
+	<div id="loginViaSocial" style="padding-top:70px;">
 		<span id="loginOverlayClose" class="icon icon-whitex"></span>
         <?php foreach($g['snskor'] as $key => $val):?>
 		<?php if(!$d[$g['mdl_slogin']]['use_'.$key])continue?>
@@ -158,7 +165,12 @@ function goHistoryBack() {
 			<div id="loginInfomation">
 				<img src="<?php echo getMyPicSrc($my['uid'])?>" id="loginThumbnail"/>
 				<?if($my['uid']) :?>
-				<h3><?=$my['name']?><?=$my['vip']? '<span class="icon icon-tag-vip">':''?></span></h3>
+				<h3>
+					<?=$my['name']?><?=$my['vip']? '<span class="icon icon-tag-vip">':''?></span>
+					<span class="margin-right">
+						<img src="<?php echo $g['img_layout']?>/pre1.png" data-toggle="modals" data-target="#modal-premium" data-url="/?mod=mymenu&submode=premium"/>
+					</span>
+				</h3>
 				<h4><?=$my['id']?></h4>
 				<!-- <h4><a href="/?r=home&a=logout">logout</a></h4>-->
 				<? else :?>
@@ -168,8 +180,8 @@ function goHistoryBack() {
 			</div>
 		</div>
 		<?if($my['uid']) :?>
-            <div id="loginBody" style="overflow-y:auto;height:65%;margin-top:300px;">
-                <ul>
+            <div id="loginBody" style="overflow-y:auto;height:46%;margin-top:300px;">
+                <ul style="height:770px;">
                     <li>
                         <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="game">
                             <span class="loginicon icon-golfer"></span><span class="normal-text">나의 경기</span>
@@ -226,7 +238,7 @@ function goHistoryBack() {
                 </ul>
             </div>
 		<? else :?>		
-		<div id="loginFooter">
+		<div id="loginFooter" style="margin-top:300px !important;">
 			<span id="loginButton">
 				로그인
 			</span>
@@ -243,25 +255,31 @@ if(($submode == 'list' && $mod != 'mymenu' || $submode == 'search_list' || $subm
 		</div>
 	</header>
 <? }?>	
+<!-- ################ 상단 타이틀 바를 fixed 로 해서 content 영역의 margin-top 동적 적용 by 김영주 2016.7.16 ################################# -->
 <?php
+// mod & submode 기준 컨텐트 영역 margin-top 세팅 
 $contentMarginTop='';
 if($mod=='rounge'||!$mod){
-   if($submode=='list') $contentMarginTop=37;
-   else $contentMarginTop=0;	
+   if($m=='member') $contentMarginTop=0;
+   else{
+   	  if($submode=='list') $contentMarginTop=37;
+      else $contentMarginTop=0;
+   } 	
 }
 else if($mod=='booking'|| $mod=='matching'||$mod=='event'){
-
-   if($submode=='list' || $submode=='ranking_all') $contentMarginTop=53;
+   if($submode=='list' || $submode=='ranking_all') $contentMarginTop=43;
    else $contentMarginTop=0;	
 }
-else if($mod=='mymenu') $contentMarginTop=78;	
-?>
+else if($mod=='mymenu') $contentMarginTop=78;
 
-<div id="nonMymenu" style="margin-top:<?php echo $contentMarginTop?>px">
-<?php require_once __KIMS_CONTENT__ ?>
+?>
+<div id="nonMymenu" style="margin-top:<?php echo $contentMarginTop?>px;"> 
+    <?php require_once __KIMS_CONTENT__ ?>
 </div>
+
+<!-- ####################################################### 모달 모음 ################################################--> 
 <!--mymenu 모달 -->
-<div class="modal" id="modal-mymenu">
+<div class="modal effect-scale" id="modal-mymenu">
     <header class="fix">
          <div id="header-colored">
              <div id="header-left">
@@ -273,8 +291,25 @@ else if($mod=='mymenu') $contentMarginTop=78;
     <div class="content" data-role="content"><!-- mymenu 내용 --> </div>
 </div>
 
-<script type="text/javascript">
+<!--intro 모달 -->
+<div class="modal effect-scale" id="modal-intro">
+  <?php include $g['path_page'].'main_mobile.php';?>
+</div>
 
+<!--프리미엄 신청 모달 -->
+<div class="modal effect-scale" id="modal-premium">
+  <?php include $g['path_page'].'mymenu/premium.php';?>
+</div>
+
+<?php if(!$mod && $m!='member'):?>
+<script type="text/javascript">
+   $('#modal-intro').modals({
+	  	history : false
+	});
+</script>
+<?php endif?>
+
+<script>  
 // 소셜 로그인 실행  
 $(document).on('click','[data-role="social-login"]',function(){
     var connectUrl=$(this).data('connect');
@@ -286,7 +321,7 @@ var BodyHeight = $("body").height();
 var LoginHeaderHeight = $("#loginHeader").height();
 var ButtonMargin = ((window.outerHeight - LoginHeaderHeight) / 2) - 100;
 $("#loginPanel").css("height", BodyHeight);
-//$("#loginFooter").css("height", BodyHeight - LoginHeaderHeight);
+$("#loginFooter").css("height", BodyHeight - LoginHeaderHeight);
 $("#loginFooter").css("height", "615px");
 if(ButtonMargin > 0) {
 	$("#loginButton").css("margin-top", ButtonMargin);
@@ -365,15 +400,17 @@ var close_menu_body = function() {
 	$("#myMenuOverlay").remove();
 	$("#myMenuOverlay").remove();
 }
+
 /*mymenu end */
 var open_menu = function() {
 	$("#loginOverlay").addClass("active").css("height", 994);
 	$("#loginPanel").addClass("active").css("height", 992);
 
 	// 백그라운드 content 의 scroll 환경 제거 
-	$('.section-body').css('height',0);
-	$('.section-body').removeClass('overflow-auto').addClass('overflow-hidden'); 
+	$('body').removeClass('overflow-auto').addClass('overflow-hidden');
+    $('#loginBody').scrollTop(0); 	
 };
+
 var scroll_stop = function() {
 	$(window).scroll(function() {
 		console.log([$(window).scrollTop(), $(window).height(), $(document).height(), BodyHeight]);
@@ -388,8 +425,7 @@ var close_menu = function() {
 	$("#loginOverlay").removeClass("active");
 
 	// 백그라운드 content 의 scroll 환경 복구  
-	$('.section-body').css('height','90%');
-	$('.section-body').addClass('overflow-auto').removeClass('overflow-hidden');
+     $('body').removeClass('overflow-hidden').addClass('overflow-auto');
 	//$('.section-body').scrollTop()=0; 
 };
 var close_panel = function() {
@@ -501,5 +537,17 @@ var getMyMenuTitle=function(submode,detailmode) {
 	return title;	
 
 }
+// 초기실행 내용  
+$(window).on('load', function () {
+    // 메인 메뉴 affix 적용을 위한 wrapping 
+    var menu=$('.menu-strip');
+    $(menu).css({'background-color':'#fff','z-index':10});
+    var affix='<div data-control="scroll" data-type="affix" data-offset="70">';
+    $(menu).wrap(affix);
+
+    // swiper 실행 
+    RC_initSwiper(); 
+})
+
 </script>
 
