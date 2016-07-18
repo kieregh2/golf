@@ -30,6 +30,7 @@ $accountQue = $account ? 'site='.$account.' and ':'';
 //$accountQue = $account ? 'a.site='.$account.' and ':'';
 $_WHERE = $accountQue.'d_regis > '.$year1.sprintf('%02d',$month1).sprintf('%02d',$day1).'000000 and d_regis < '.$year2.sprintf('%02d',$month2).sprintf('%02d',$day2).'240000';
 if ($auth) $_WHERE .= ' and auth='.$auth;
+if ($vip_auth!=='') $_WHERE .= ' and vip=1 and vip_auth='.$vip_auth;
 if ($sosok) $_WHERE .= ' and sosok='.$sosok;
 if ($level) $_WHERE .= ' and level='.$level;
 if ($now_log) $_WHERE .= ' and now_log='.($now_log-1);
@@ -67,6 +68,7 @@ $xmonth1= substr($date['totime'],4,2);
 $xday1	= substr($date['totime'],6,2);
 $xhour1	= substr($date['totime'],8,2);
 $xmin1	= substr($date['totime'],10,2);
+
 ?>
 
 
@@ -130,6 +132,15 @@ $xmin1	= substr($date['totime'],10,2);
 		<option value="2"<?php if($auth == 2):?> selected="selected"<?php endif?>><?php echo $autharr[2]?></option>
 		<option value="3"<?php if($auth == 3):?> selected="selected"<?php endif?>><?php echo $autharr[3]?></option>
 		<option value="4"<?php if($auth == 4):?> selected="selected"<?php endif?>><?php echo $autharr[4]?></option>
+		</select>
+		<select name="vip_auth" onchange="this.form.submit();">
+		<option value="">VIP 인증</option>
+		<option value="">--------</option>
+		<option value="0"<?php if($vip_auth!=''&&$vip_auth == 0):?> selected="selected"<?php endif?>>후보</option>
+		<option value="1"<?php if($vip_auth == 1):?> selected="selected"<?php endif?>>승인됨</option>
+		<option value="2"<?php if($vip_auth == 2):?> selected="selected"<?php endif?>>심사중</option>
+		<option value="3"<?php if($vip_auth == 3):?> selected="selected"<?php endif?>>거절</option>
+	
 		</select>
 
 		<select name="sosok" onchange="this.form.submit();">
@@ -286,10 +297,11 @@ $xmin1	= substr($date['totime'],10,2);
 	<col width="50"> 
 	<col width="30"> 
 	<col width="30"> 
-	<col width="30"> 
-	<col width="30"> 
+	<col width="100"> 
+	<col width="100"> 
 	<col width="100"> 
 	<col width="70"> 
+	<col width="100"> <!-- vip 요청 첨부 이미지 --> 
 	<col width="30"> 
 	<col width="30">
 	<col width="30"> 
@@ -323,7 +335,8 @@ $xmin1	= substr($date['totime'],10,2);
 	<th scope="col">이름</th>
 	<th scope="col">닉네임</th>
 	<th scope="col">아이디</th>
-	<th scope="col">등급</th>
+	<th scope="col">vip 첨부이미지</th>
+	<th scope="col">level</th>
 	<th scope="col">성별</th>
 	<th scope="col">나이</th>
 	<th scope="col">생년월일</th>
@@ -350,15 +363,36 @@ $xmin1	= substr($date['totime'],10,2);
 	<tbody>
 	<?php while($R=db_fetch_array($RCD)):?>
 	<?php $_R=getUidData($table['s_mbrid'],$R['memberuid'])?>
+	<?php
+	   // 회원 등급 세팅 
+		$mbr_level='';
+		if($R['vip']){
+			if(!$R['vip_auth']) $mbr_level='vip 후보';
+			else if($R['vip_auth']==1) $mbr_level='vip';
+			else if($R['vip_auth']==2) $mbr_level='vip 심사중'; // vip 요청한 경우 
+			else if($R['vip_auth']==3) $mbr_level='vip 거절'; 
+		}
+		else if($R['premium']) $mbr_level='프리미엄';
+		else $mbr_level='일반';     
+	?>
 	<tr>
 	<td class="side1"><input type="checkbox" name="mbrmembers[]" value="<?php echo $R['memberuid']?>" /></td>
 	<td><?php echo ($NUM-((($p-1)*$recnum)+$_recnum++))?></td>
 	<td><?php echo $autharr[$R['auth']]?></td>
 	<td><?php echo $R['now_log']?'Y':'N'?></td>
-	<td><?php echo $R['premium']." ".$R['vip']?></td>
+	<td><?php echo $mbr_level?></td>
 	<td><a href="javascript:OpenWindow('<?php echo $g['s']?>/?r=<?php echo $r?>&iframe=Y&m=<?php echo $module?>&front=manager&page=main&mbruid=<?php echo $R['memberuid']?>');" title="회원메니져"><?php echo $R['name']?></a></td>
 	<td><a href="javascript:OpenWindow('<?php echo $g['s']?>/?r=<?php echo $r?>&iframe=Y&m=<?php echo $module?>&front=manager&page=post&mbruid=<?php echo $R['memberuid']?>');" title="게시정보"><?php echo $R['nic']?></a></td>
 	<td><a href="javascript:OpenWindow('<?php echo $g['s']?>/?r=<?php echo $r?>&iframe=Y&m=<?php echo $module?>&front=manager&page=info&mbruid=<?php echo $R['memberuid']?>');" title="회원정보"><?php echo $_R['id']?></a></td>
+	<td>
+    <?php if($R['vip_photo']):?>
+      <a href="<?php echo $g['s']?>/?r=<?php echo $r?>&amp;m=member&amp;a=vip_download&amp;uid=<?php echo $R['memberuid']?>">
+      	<input type="button" class="btngray" style="display:inline-block;padding: 5px;height:28px;" value="첨부이미지" >
+      </a>
+    <?php else:?>
+     없음 
+    <?php endif?>
+	</td>
 	<td><?php echo $R['level']?></td>
 	<td><?php if($R['sex']) echo getSex($R['sex'])?></td>
 	<td><?php if($R['birth1']) echo getAge($R['birth1'])?></td>
@@ -404,6 +438,15 @@ $xmin1	= substr($date['totime'],10,2);
 		</div>
 		
 		<div id="span_member_tool" class="xt1 hide">
+        
+        <select name="vip_auth" class="select">
+		<option value="">VIP 인증</option>
+		<option value="">-----------------</option>
+		<option value="1">ㆍ인증</option>
+		<option value="2">ㆍ심사중</option>
+		<option value="3">ㆍ거절</option>
+		</select>
+		<input type="button" class="btnblue" value="변경" onclick="actQue('tool_vip_auth');" /> <br />
 
 		<select name="auth" class="select">
 		<option value="">회원인증</option>
