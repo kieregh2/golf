@@ -44,7 +44,6 @@ if ($g['use_social'])
 #content .menu-strip.plainmode {padding-top:12px !important;}
 </style>
 <?php endif?>	
-
 <script type='text/javascript' src='/_core/js/jquery-ui/jquery-ui.min.js'></script>
 <link type="text/css" rel="stylesheet" charset="utf-8" href="/_core/js/jquery-ui/jquery-ui.min.css"/>
 <script type='text/javascript' src='/layouts/mobile/_rc/rc-min.js'></script>
@@ -52,7 +51,6 @@ if ($g['use_social'])
  
 <script>
 var areaList = <?=json_encode($areaList)?>;
-
 function getPageMove(url) {
 	
  	location.href = url;
@@ -166,9 +164,9 @@ function goHistoryBack() {
 				<img src="<?php echo getMyPicSrc($my['uid'])?>" id="loginThumbnail"/>
 				<?if($my['uid']) :?>
 				<h3>
-					<?=$my['name']?><?=$my['vip']? '<span class="icon icon-tag-vip">':''?></span>
-					<span class="margin-right">
-						<img src="<?php echo $g['img_layout']?>/pre1.png" data-toggle="modals" data-target="#modal-premium" data-url="/?mod=mymenu&submode=premium"/>
+					<?=$my['name']?><?=$my['vip']? '<span class="icon icon-tag-vip" data-role="mymenu-item" data-menu="vip"></span>':''?></span>
+					<span class="margin-right" style="vertical-align:middle;">
+						<img src="<?php echo $g['img_layout']?>/pre1.png" data-role="mymenu-item" data-menu="premium" style="height:20px;vertical-align:1px"/>
 					</span>
 				</h3>
 				<h4><?=$my['id']?></h4>
@@ -271,12 +269,10 @@ else if($mod=='booking'|| $mod=='matching'||$mod=='event'){
    else $contentMarginTop=0;	
 }
 else if($mod=='mymenu') $contentMarginTop=78;
-
 ?>
 <div id="nonMymenu" style="margin-top:<?php echo $contentMarginTop?>px;"> 
     <?php require_once __KIMS_CONTENT__ ?>
 </div>
-
 <!-- ####################################################### 모달 모음 ################################################--> 
 <!--mymenu 모달 -->
 <div class="modal effect-scale" id="modal-mymenu">
@@ -290,26 +286,28 @@ else if($mod=='mymenu') $contentMarginTop=78;
     </header>
     <div class="content" data-role="content"><!-- mymenu 내용 --> </div>
 </div>
-
 <!--intro 모달 -->
 <div class="modal effect-scale" id="modal-intro">
   <?php include $g['path_page'].'main_mobile.php';?>
 </div>
 
-<!--프리미엄 신청 모달 -->
-<div class="modal effect-scale" id="modal-premium">
-  <?php include $g['path_page'].'mymenu/premium.php';?>
-</div>
-
-<?php if(!$mod && $m!='member'):?>
+<!-- intro_close 세션값 체크해서 인트로를 한 번만 보여주기 -->
+<?php if(!$_SESSION['intro_close'] || $_SESSION['intro_close']!=session_id()):?>
 <script type="text/javascript">
-   $('#modal-intro').modals({
+    $('#modal-intro').modals({
 	  	history : false
 	});
 </script>
 <?php endif?>
-
 <script>  
+// 인트로 모달 닫을 때 현재 세션아이디를 세션에 저장 
+$('#modal-intro').on('hidden.rc.modal',function(){
+	$.post(rooturl+'/?r='+raccount+'&m=golf&a=regiIntroCloseToSession',{
+    },function(response){
+	
+	});      
+});
+
 // 소셜 로그인 실행  
 $(document).on('click','[data-role="social-login"]',function(){
     var connectUrl=$(this).data('connect');
@@ -378,10 +376,8 @@ var getMymenuList = function(submode, detailmode) {
 	$(window).resize();
 	window.scrollTo(0, 0);
 }
-
 // 공통으로 사용 : 모달 오픈시 & 좌측메뉴 열고 닫을 때 
 var mymenu_modal=$('#modal-mymenu');
-
 // 마이메뉴 모달 오픈 
 $('[data-role="mymenu-item"]').on('click',function(e){
 	e.preventDefault();
@@ -395,22 +391,18 @@ $('[data-role="mymenu-item"]').on('click',function(e){
        url : url
     }); 
 })
-
 var close_menu_body = function() {
 	$("#myMenuOverlay").remove();
 	$("#myMenuOverlay").remove();
 }
-
 /*mymenu end */
 var open_menu = function() {
 	$("#loginOverlay").addClass("active").css("height", 994);
 	$("#loginPanel").addClass("active").css("height", 992);
-
 	// 백그라운드 content 의 scroll 환경 제거 
 	$('body').removeClass('overflow-auto').addClass('overflow-hidden');
     $('#loginBody').scrollTop(0); 	
 };
-
 var scroll_stop = function() {
 	$(window).scroll(function() {
 		console.log([$(window).scrollTop(), $(window).height(), $(document).height(), BodyHeight]);
@@ -423,7 +415,6 @@ var close_menu = function() {
 	close_panel();
 	$("#loginOverlay").css("height", 0);
 	$("#loginOverlay").removeClass("active");
-
 	// 백그라운드 content 의 scroll 환경 복구  
      $('body').removeClass('overflow-hidden').addClass('overflow-auto');
 	//$('.section-body').scrollTop()=0; 
@@ -467,6 +458,7 @@ function updateDevice(datas){
     var uuid  = dts.uuid;
     var dev   = dts.dev;
     var memberuid='<?php echo $my['uid']?>';
+    //alert([regid, uuid, dev]);
     $.post(rooturl+'/?r='+raccount+'&m=golf&a=setMemberDeviceid',{
         memberuid : memberuid,
         token : regid,
@@ -481,6 +473,7 @@ function updateDevice(datas){
 function checkDevice(datas){
     var dts = $.parseJSON(datas);
     var now_device_id  = dts.uuid;
+    //alert([dts.uuid,dts.regid]);
     var my_device_id='<?php echo $my['deviceid']?>';
     
     if(my_device_id=='') getUuid("updateDevice"); // deviceid 가 없는 경우 
@@ -508,12 +501,10 @@ function setUuid(_succFn){
 setUuid("checkDevice"); // 디바이스 체크함수를 호출
 <?php endif?>
 </script>
-
 <!-- 마이메뉴 load 할때 타이틀 세팅 스크립트 추가 -->
 <script>
-var getMyMenuTitle=function(submode,detailmode) {
+function getMyMenuTitle(submode,detailmode) {
     var title;
-
 	if(submode == 'friends') title="친구";
 	else if(submode == 'game') title="나의경기";
 	else if(submode == 'game.view') title="나의경기";
@@ -524,6 +515,8 @@ var getMyMenuTitle=function(submode,detailmode) {
 	else if(submode == 'bill') title="결제현황";
 	else if(submode == 'timeline') title="타임라인";
 	else if(submode == 'setting') title="설정하기";
+	else if(submode == 'premium') title="프리미엄 신청하기";
+	else if(submode == 'vip') title="V.I.P 인증";
 	else if(submode == 'setting.profile') title="설정하기";
 	else if(submode == 'manager' 
 		|| 	submode == 'manager.schedule.rounge'
@@ -533,21 +526,16 @@ var getMyMenuTitle=function(submode,detailmode) {
 		||  submode == 'manager.cancel') {
 		title="매니져";
 	}
-
 	return title;	
-
 }
 // 초기실행 내용  
 $(window).on('load', function () {
     // 메인 메뉴 affix 적용을 위한 wrapping 
     var menu=$('.menu-strip');
     $(menu).css({'background-color':'#fff','z-index':10});
-    var affix='<div data-control="scroll" data-type="affix" data-offset="70">';
+    var affix='<div data-control="scroll" data-type="affix" data-offset="70" data-target="#nonMymenu">';
     $(menu).wrap(affix);
-
     // swiper 실행 
     RC_initSwiper(); 
 })
-
 </script>
-
