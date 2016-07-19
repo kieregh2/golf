@@ -178,54 +178,26 @@ function goHistoryBack() {
 			</div>
 		</div>
 		<?if($my['uid']) :?>
-            <div id="loginBody" style="overflow-y:auto;height:46%;margin-top:300px;">
-                <ul style="height:770px;">
+		    <?php $ul_height=$my['sosok']==3?'1000':'950'?>
+            <div id="loginBody" style="overflow-y:auto;position:fixed;top:300px;width:92%;height:700px;">
+                <ul style="width:100%;height:<?php echo $ul_height?>px;">
+                	<?php 
+                	$myMenuListArray=array(
+                		'game'=>array('나의 경기','golfer'),'friends'=>array('친구','friends'),
+                	    'saving'=>array('적립현황','database'),'wishlist'=>array('찜 내역','heart-big'),
+                	    'coupon'=>array('나의 쿠폰보기','coupon'),'review'=>array('리뷰쓰기','pen'),
+                	    'bill'=>array('결제현황','wallet'),'timeline'=>array('타임라인','timeline'),
+                	    'setting'=>array('설정하기','config')
+                	);
+                	?>
+                	<?php foreach($myMenuListArray as $item => $name_icon):?>
+                	<?php $name=$name_icon[0];$icon=$name_icon[1]?>
                     <li>
-                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="game">
-                            <span class="loginicon icon-golfer"></span><span class="normal-text">나의 경기</span>
+                    	<a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="<?php echo $item?>">
+                            <span class="loginicon icon-<?php echo $icon?>"></span><span class="normal-text"><?php echo $name?></span>
                         </a>                        
                     </li>
-                    <li>
-                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="friends">
-                            <span class="loginicon icon-friends"></span><span class="normal-text">친구</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="saving">
-                            <span class="loginicon icon-database"></span><span class="normal-text">적립현황</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="wishlist">
-                            <span class="loginicon icon-heart-big"></span><span class="normal-text">찜 내역</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="coupon">
-                            <span class="loginicon icon-coupon"></span><span class="normal-text">나의 쿠폰보기</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="review">
-                            <span class="loginicon icon-pen"></span><span class="normal-text">리뷰쓰기</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="bill">
-                            <span class="loginicon icon-wallet"></span><span class="normal-text">결제현황</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="timeline">
-                        <!-- <a class="fill-up-space" href="/?mod=mymenu&submode=timeline"> -->
-                            <span id="mymenuTimelineList" class="loginicon icon-timeline"></span><span class="normal-text">타임라인</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="setting">
-                            <span class="loginicon icon-config"></span><span class="normal-text">설정하기</span>
-                        </a>
-                    </li>
+                    <?php endforeach?>
                     <?php if($my['sosok']==3):?>
                     <li>
                         <a class="fill-up-space" href="#" data-role="mymenu-item" data-menu="manager">
@@ -236,8 +208,8 @@ function goHistoryBack() {
                 </ul>
             </div>
 		<? else :?>		
-		<div id="loginFooter" style="margin-top:300px !important;">
-			<span id="loginButton">
+		<div id="loginFooter" style="position:fixed;top:300px;text-align:center;width:92%;">
+			<span id="loginButton" style="width:78%;">
 				로그인
 			</span>
 		</div>
@@ -320,7 +292,7 @@ var LoginHeaderHeight = $("#loginHeader").height();
 var ButtonMargin = ((window.outerHeight - LoginHeaderHeight) / 2) - 100;
 $("#loginPanel").css("height", BodyHeight);
 $("#loginFooter").css("height", BodyHeight - LoginHeaderHeight);
-$("#loginFooter").css("height", "615px");
+//$("#loginFooter").css("height", "615px");
 if(ButtonMargin > 0) {
 	$("#loginButton").css("margin-top", ButtonMargin);
 } else {
@@ -402,6 +374,7 @@ var open_menu = function() {
 	// 백그라운드 content 의 scroll 환경 제거 
 	$('body').removeClass('overflow-auto').addClass('overflow-hidden');
     $('#loginBody').scrollTop(0); 	
+    $('#loginFooter').scrollTop(0);
 };
 var scroll_stop = function() {
 	$(window).scroll(function() {
@@ -436,21 +409,7 @@ var close_social_login = function(sel) {
 var test1 = function() {
 	alert(1);
 }
-/*
-$(window).scroll(function() {
-   //if($(window).scrollTop() + $(window).height() == $(document).height()) {
-   console.log([$(window).scrollTop(), $(window).height(), $(document).height(), BodyHeight]);
-   if($(window).scrollTop() + $(window).height() == $(document).height()) {
-       alert("bottom!");
-       // getData();
-   }
-});	
-function getData() {
-    $.getJSON('Get/GetData?no=1', function (responseText) {
-        //Load some data from the server
-    })
-};
-*/
+
 // 디바이스 정보 업데이트 
 function updateDevice(datas){
     var dts = $.parseJSON(datas);
@@ -529,13 +488,15 @@ function getMyMenuTitle(submode,detailmode) {
 	return title;	
 }
 // 초기실행 내용  
-$(window).on('load', function () {
-    // 메인 메뉴 affix 적용을 위한 wrapping 
+$(document).ready(function(){
+     // 메인 메뉴 affix 적용을 위한 wrapping 
     var menu=$('.menu-strip');
     $(menu).css({'background-color':'#fff','z-index':10});
-    var affix='<div data-control="scroll" data-type="affix" data-offset="70" data-target="#nonMymenu">';
+    var affix='<div data-control="scroll" data-type="affix" data-offset="70" >';
     $(menu).wrap(affix);
-    // swiper 실행 
+});
+$(window).on('load', function () {
+   // swiper 실행 
     RC_initSwiper(); 
 })
 </script>
