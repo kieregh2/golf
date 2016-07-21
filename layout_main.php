@@ -110,6 +110,31 @@ function goHistoryBack() {
 		history.go(-1);
 	<?php endif?>
 }
+function getMyMenuTitle(submode,detailmode) {
+    var title;
+	if(submode == 'friends') title="친구";
+	else if(submode == 'game') title="나의경기";
+	else if(submode == 'game.view') title="나의경기";
+	else if(submode == 'saving') title="적립현황";
+	else if(submode == 'wishlist') title="찜내역";
+	else if(submode == 'coupon') title="나의 쿠폰보기";
+	else if(submode == 'review' || submode == 'review.rounge.view' || submode == 'review.myteam.view') title="리뷰쓰기";
+	else if(submode == 'bill') title="결제현황";
+	else if(submode == 'timeline') title="타임라인";
+	else if(submode == 'setting') title="설정하기";
+	else if(submode == 'premium') title="프리미엄 신청하기";
+	else if(submode == 'vip') title="V.I.P 인증";
+	else if(submode == 'setting.profile') title="설정하기";
+	else if(submode == 'manager' 
+		|| 	submode == 'manager.schedule.rounge'
+		|| 	submode == 'manager.schedule.time'
+		|| 	submode == 'manager.request'
+		||  submode == 'manager.confirm'
+		||  submode == 'manager.cancel') {
+		title="매니져";
+	}
+	return title;	
+}
 </script>
 <iframe name='hiddemFramePaper' style='display:none;'></iframe>
 <div id='_allLayoutBox_' style='background:#f3f3f3;'>
@@ -208,7 +233,7 @@ function goHistoryBack() {
                 </ul>
             </div>
 		<? else :?>		
-		<div id="loginFooter" style="position:fixed;top:300px;text-align:center;width:92%;">
+		<div id="loginFooter" style="position:fixed;top:300px;text-align:center;width:92%;height:700px">
 			<span id="loginButton" style="width:78%;">
 				로그인
 			</span>
@@ -262,7 +287,6 @@ else if($mod=='mymenu') $contentMarginTop=78;
 <div class="modal effect-scale" id="modal-intro">
   <?php include $g['path_page'].'main_mobile.php';?>
 </div>
-
 <!-- intro_close 세션값 체크해서 인트로를 한 번만 보여주기 -->
 <?php if(!$_SESSION['intro_close'] || $_SESSION['intro_close']!=session_id()):?>
 <script type="text/javascript">
@@ -279,7 +303,6 @@ $('#modal-intro').on('hidden.rc.modal',function(){
 	
 	});      
 });
-
 // 소셜 로그인 실행  
 $(document).on('click','[data-role="social-login"]',function(){
     var connectUrl=$(this).data('connect');
@@ -409,7 +432,6 @@ var close_social_login = function(sel) {
 var test1 = function() {
 	alert(1);
 }
-
 // 디바이스 정보 업데이트 
 function updateDevice(datas){
     var dts = $.parseJSON(datas);
@@ -417,6 +439,10 @@ function updateDevice(datas){
     var uuid  = dts.uuid;
     var dev   = dts.dev;
     var memberuid='<?php echo $my['uid']?>';
+	localStorage.setItem("deviceid",uuid);
+	localStorage.setItem("token",regid);
+	localStorage.setItem("dev",dev);
+    
     //alert([regid, uuid, dev]);
     $.post(rooturl+'/?r='+raccount+'&m=golf&a=setMemberDeviceid',{
         memberuid : memberuid,
@@ -462,31 +488,6 @@ setUuid("checkDevice"); // 디바이스 체크함수를 호출
 </script>
 <!-- 마이메뉴 load 할때 타이틀 세팅 스크립트 추가 -->
 <script>
-function getMyMenuTitle(submode,detailmode) {
-    var title;
-	if(submode == 'friends') title="친구";
-	else if(submode == 'game') title="나의경기";
-	else if(submode == 'game.view') title="나의경기";
-	else if(submode == 'saving') title="적립현황";
-	else if(submode == 'wishlist') title="찜내역";
-	else if(submode == 'coupon') title="나의 쿠폰보기";
-	else if(submode == 'review' || submode == 'review.rounge.view' || submode == 'review.myteam.view') title="리뷰쓰기";
-	else if(submode == 'bill') title="결제현황";
-	else if(submode == 'timeline') title="타임라인";
-	else if(submode == 'setting') title="설정하기";
-	else if(submode == 'premium') title="프리미엄 신청하기";
-	else if(submode == 'vip') title="V.I.P 인증";
-	else if(submode == 'setting.profile') title="설정하기";
-	else if(submode == 'manager' 
-		|| 	submode == 'manager.schedule.rounge'
-		|| 	submode == 'manager.schedule.time'
-		|| 	submode == 'manager.request'
-		||  submode == 'manager.confirm'
-		||  submode == 'manager.cancel') {
-		title="매니져";
-	}
-	return title;	
-}
 // 초기실행 내용  
 $(document).ready(function(){
      // 메인 메뉴 affix 적용을 위한 wrapping 
