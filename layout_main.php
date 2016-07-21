@@ -291,7 +291,7 @@ var BodyHeight = $("body").height();
 var LoginHeaderHeight = $("#loginHeader").height();
 var ButtonMargin = ((window.outerHeight - LoginHeaderHeight) / 2) - 100;
 $("#loginPanel").css("height", BodyHeight);
-$("#loginFooter").css("height", BodyHeight - LoginHeaderHeight);
+//$("#loginFooter").css("height", BodyHeight - LoginHeaderHeight);
 //$("#loginFooter").css("height", "615px");
 if(ButtonMargin > 0) {
 	$("#loginButton").css("margin-top", ButtonMargin);
