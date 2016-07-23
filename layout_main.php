@@ -12,6 +12,7 @@ if ($g['use_social'])
 	include $g['path_module'].$g['mdl_slogin'].'/lang.korean/action/a.slogin.check.php';
 }
 ?>
+
 <style>
 .overflow-auto {overflow:auto;height:98%;}
 .overflow-hidden {overflow:hidden;}
@@ -287,22 +288,8 @@ else if($mod=='mymenu') $contentMarginTop=78;
 <div class="modal effect-scale" id="modal-intro">
   <?php include $g['path_page'].'main_mobile.php';?>
 </div>
-<!-- intro_close 세션값 체크해서 인트로를 한 번만 보여주기 -->
-<?php if(!$_SESSION['intro_close'] || $_SESSION['intro_close']!=session_id()):?>
-<script type="text/javascript">
-    $('#modal-intro').modals({
-	  	history : false
-	});
-</script>
-<?php endif?>
+
 <script>  
-// 인트로 모달 닫을 때 현재 세션아이디를 세션에 저장 
-$('#modal-intro').on('hidden.rc.modal',function(){
-	$.post(rooturl+'/?r='+raccount+'&m=golf&a=regiIntroCloseToSession',{
-    },function(response){
-	
-	});      
-});
 // 소셜 로그인 실행  
 $(document).on('click','[data-role="social-login"]',function(){
     var connectUrl=$(this).data('connect');
@@ -321,6 +308,7 @@ if(ButtonMargin > 0) {
 } else {
 	$("#loginButton").css("margin-top", 0);
 }
+
 //# 헤더메뉴 오픈
 $("#header-menu").on("click", function() {
 	header_menu()
@@ -485,6 +473,22 @@ function setUuid(_succFn){
 <?php if($my['uid']):?>
 setUuid("checkDevice"); // 디바이스 체크함수를 호출
 <?php endif?>
+</script>
+
+<!-- intro 모달 제어 구문  -->
+<script>
+$(document).ready(function(){
+	var intro_view=window.localStorage.getItem("intro_view");
+	if(intro_view==''){
+	    $('#modal-intro').modals({
+			history : false
+	     });
+    }
+});
+// 인트로 모달 닫을 localStorage 에 저장한다 .  
+$('#modal-intro').on('hidden.rc.modal',function(){
+	 window.localStorage.setItem("intro_view", "1");
+});
 </script>
 <!-- 마이메뉴 load 할때 타이틀 세팅 스크립트 추가 -->
 <script>
