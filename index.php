@@ -2,14 +2,10 @@
 header("Content-type:text/html;charset=utf-8");
 define('__KIMS__',true);
 error_reporting(E_ALL ^ E_NOTICE);
-
 session_save_path('./_tmp/session');
 session_start();
-
 ini_set('error_reporting',E_ALL & ~E_NOTICE ); // E_ALL | E_STRICT 최고수준의 에러보고 
 ini_set("display_errors", 1);
-
-
 if(!get_magic_quotes_gpc())
 {
 	if (is_array($_GET))
@@ -32,7 +28,6 @@ else {
 		extract($_POST);
 	}
 }
-
 $d = array();
 $g = array(
 	'path_root'   => './',
@@ -47,10 +42,8 @@ $g = array(
 	'path_file'   => './files/',
 	'sys_lang'    => 'korean'
 );
-
 $g['time_split'] = explode(' ',microtime());
 $g['time_start'] = $g['time_split'][0]+$g['time_split'][1];
-
 if (is_file($g['path_var'].'db.info.php'))
 {
 	require $g['path_module'].'admin/var/var.system.php';
@@ -70,7 +63,6 @@ if (is_file($g['path_var'].'db.info.php'))
 	require $g['path_core'].'engine/main.engine.php';
 }
 else $m = 'admin';
-
 if ($keyword)
 {
 	$keyword = trim($keyword);
@@ -83,25 +75,20 @@ $g['dir_module'] = $g['path_module'].$m.'/';
 $g['url_module'] = $g['s'].'/modules/'.$m;
 $g['img_module'] = $g['url_module'].'/image';
 $g['add_module'] = $g['dir_module'].'_main.php';
-
 if (is_file($g['add_module'])) include $g['add_module'];
 if ($a) require $g['path_core'].'engine/action.engine.php';
 if ($_HS['open'] > 1) require $g['path_core'].'engine/siteopen.engine.php';
 if (!$s && $m != 'admin') getLink($g['s'].'/?r='.$r.'&m=admin&module='.$g['sys_module'].'&nosite=Y','','','');
-
 include $g['dir_module'].'main.php';
-
 if ($m=='admin' || $iframe=='Y') $d['layout']['php'] = $_HM['layout'] = '_blank/main.php';
 else {
 	if (!$g['mobile']||$_SESSION['pcmode']=='Y') $d['layout']['php'] = $prelayout ? $prelayout.'.php' : ($_HM['layout'] ? $_HM['layout'] : $_HS['layout']);
 	else $d['layout']['php'] = $prelayout ? $prelayout.'.php' : ($_HS['m_layout'] ? $_HS['m_layout'] : ($_HM['layout'] ? $_HM['layout'] : $_HS['layout']));
 }
-
 $d['layout']['dir'] = dirname($d['layout']['php']);
 $d['layout']['str'] = str_replace('.php','',$d['layout']['php']);
 $d['layout']['pwd'] = $g['path_layout'].$d['layout']['str'];
 $d['layout']['var'] = $g['path_layout'].$d['layout']['dir'].'/_main.php';
-
 $g['url_layout'] = $g['s'].'/layouts/'.$d['layout']['dir'];
 $g['img_layout'] = $g['url_layout'].'/image';
 if (is_file($d['layout']['var'])) include $d['layout']['var'];
@@ -110,7 +97,6 @@ define('__KIMS_CONTAINER_HEAD__',$g['path_core'].'engine/container_head.engine.p
 define('__KIMS_CONTAINER_FOOT__',$g['path_core'].'engine/container_foot.engine.php');
 foreach($g['switch_1'] as $_switch) include $_switch;
 if ($m!='admin'){include $g['path_var'].'sitephp/'.$_HS['uid'].'.php';if($_HS['buffer']){$g['buffer']=true;ob_start('ob_gzhandler');}}
-
 ?>
 <?php if($load=='Y'):?>
 	<?php require_once __KIMS_CONTENT__ ?>
@@ -122,12 +108,11 @@ if ($m!='admin'){include $g['path_var'].'sitephp/'.$_HS['uid'].'.php';if($_HS['b
 	<?php if($g['mobile']&&$_SESSION['pcmode']!='Y'&&$_HS['m_layout']):?>
 	<!-- <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no, target-densitydpi=medium-dpi" />-->
 	<!-- <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" /> -->
-	<meta name="viewport" content="width=device-width" />
+	<meta name="viewport" content="width=device-width,user-scalable=no" />
 	<meta name="apple-mobile-web-app-capable" content="no" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	<?php endif?>
 	<title>골프치러가자</title>
-
 	<meta property="og:type" content="website">
 	<meta property="og:url" content="http://<?=$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']?>">
 	<meta property="og:title" content="<?=($R['subject'])?$R['subject']:$R['name']?>">
@@ -140,9 +125,7 @@ if ($m!='admin'){include $g['path_var'].'sitephp/'.$_HS['uid'].'.php';if($_HS['b
 	<?php include $g['path_var'].'language/'.$g['sys_selectlang'].'/_top.lang.php'?>
 	<?php include $g['path_core'].'engine/adminbar.engine.php'?>
 	<?php endif?>
-
     <?php include $g['path_layout'].$d['layout']['php']?>
-
 	<?php if($g['mobile']&&$_SESSION['pcmode']=='Y'&&$iframe!='Y'):?>
 	<div id="pctomobile"><a href="<?php echo $g['s']?>/?r=<?php echo $r?>&amp;a=mobilemode"><?php echo sprintf($lang['sys']['viewpcmode'],$m=='admin'?$lang['top']['adminmode']:$lang['top']['homepage'])?></a></div>
 	<?php endif?>
@@ -159,15 +142,16 @@ if ($m!='admin'){include $g['path_var'].'sitephp/'.$_HS['uid'].'.php';if($_HS['b
 	</script>
 	<?php foreach($g['switch_3'] as $_switch) include $_switch?>
 	<?php echo $_HS['footercode']?>
-	<link type="text/css" rel="stylesheet" charset="utf-8" href="/layouts/mobile/_rc/rc.css"/>
-	</body>
-	</html>
 	<?php foreach($g['switch_4'] as $_switch) include $_switch?>
 	<?php if($g['widget_cssjs']) include $g['path_core'].'engine/widget.cssjs.php'?>
 	<?php if($g['buffer']) ob_end_flush()?>
-
 <?php endif?>
+<link type="text/css" rel="stylesheet" charset="utf-8" href="/layouts/mobile/_rc/rc.css"/>
+<?php $UA=getUserAgent()?>
+<?php if($UA=='iphone'):?>
+<link type="text/css" rel="stylesheet" charset="utf-8" href="/layouts/mobile/_rc/rc-theme-ios.css"/>
+<?php endif?>
+</body>
+</html>
 	
 	
-
-

@@ -203,7 +203,7 @@ function getMyMenuTitle(submode,detailmode) {
 			</div>
 		</div>
 		<?if($my['uid']) :?>
-		    <?php $ul_height=$my['sosok']==3?'1000':'950'?>
+		    <?php $ul_height=$my['sosok']==3?'1150':'1050'?>
             <div id="loginBody" style="overflow-y:auto;position:fixed;top:300px;width:92%;height:700px;">
                 <ul style="width:100%;height:<?php echo $ul_height?>px;">
                 	<?php 
@@ -275,8 +275,8 @@ else if($mod=='mymenu') $contentMarginTop=78;
 <div class="modal effect-scale" id="modal-mymenu">
     <header class="fix">
          <div id="header-colored">
-             <div id="header-left">
-	                <a href="#" data-dismiss="modals"><span class="icon icon-backward"></span></a>
+             <div id="header-left" data-dismiss="modals">
+                <span class="icon icon-backward"></span>
             </div>
             <div id="header-center" data-role="title"></div>
         </div>
@@ -488,14 +488,14 @@ setUuid("checkDevice"); // 디바이스 체크함수를 호출
 </script>
 <!-- 마이메뉴 load 할때 타이틀 세팅 스크립트 추가 -->
 <script>
-// 초기실행 내용  
-$(document).ready(function(){
-     // 메인 메뉴 affix 적용을 위한 wrapping 
-    var menu=$('.menu-strip');
-    $(menu).css({'background-color':'#fff','z-index':10});
-    var affix='<div data-control="scroll" data-type="affix" data-offset="70" >';
-    $(menu).wrap(affix);
-});
+// // 초기실행 내용  
+// $(document).ready(function(){
+//      // 메인 메뉴 affix 적용을 위한 wrapping 
+//     var menu=$('.menu-strip');
+//     $(menu).css({'background-color':'#fff','z-index':10});
+//     var affix='<div data-control="scroll" data-type="affix" data-offset="70" >';
+//     $(menu).wrap(affix);
+// });
 $(window).on('load', function () {
    // swiper 실행 
     RC_initSwiper(); 
