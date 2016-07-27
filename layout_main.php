@@ -87,7 +87,6 @@ function getLogin() {
 	//loginViaSocial();
 	//social_login();
 }
-
 function getMyMenuTitle(submode,detailmode) {
     var title;
 	if(submode == 'friends') title="친구";
@@ -227,10 +226,10 @@ if(($submode == 'list' && $mod != 'mymenu' || $submode == 'search_list' || $subm
 	<header class="fix" style="position:fixed;top:0;width:100%;z-index:11;background:#fff;">
 		<div id="">
 			<span id="header-menu"></span>
-			<span id="header-title"></span>
+			<span id="header-title" onclick="location.href='/'"></span>
 		</div>
 	</header>
-<? }?>	
+<? }?>
 <!-- ################ 상단 타이틀 바를 fixed 로 해서 content 영역의 margin-top 동적 적용 by 김영주 2016.7.16 ################################# -->
 <?php
 // mod & submode 기준 컨텐트 영역 margin-top 세팅 
@@ -238,7 +237,7 @@ $contentMarginTop='';
 if($mod=='rounge'||!$mod){
    if($m=='member') $contentMarginTop=0;
    else{
-   	  if($submode=='list') $contentMarginTop=37;
+   	  if($submode=='list') $contentMarginTop=56;
       else $contentMarginTop=0;
    } 	
 }
