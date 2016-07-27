@@ -12,7 +12,6 @@ if ($g['use_social'])
 	include $g['path_module'].$g['mdl_slogin'].'/lang.korean/action/a.slogin.check.php';
 }
 ?>
-
 <style>
 .overflow-auto {overflow:auto;height:98%;}
 .overflow-hidden {overflow:hidden;}
@@ -88,29 +87,7 @@ function getLogin() {
 	//loginViaSocial();
 	//social_login();
 }
-function goHistoryBack() {
-	<?php if($_GET['mod']=='payment'):?>
-	
-		history.go(-1);
-	<?php elseif($_GET['mod']!='team' && !$_GET['uid'] && !$_GET['amode']):?>
-		location.href='/';
-	
-	
-	<?php elseif($_GET['mod'] && $_GET['submode'] == 'write' && $_GET['amode']):?>
-		location.href='/?mod=<?php echo $_GET["mod"]?>&submode=<?php echo $_GET["amode"]?>&agecode=<?php echo $_GET["agecode"]?>';
-	
-	<?php elseif($_GET['mod']=='team' && $_GET['tid'] && $_GET['amode']):?>
-		location.href='/?mod=teamlist&submode=<?php echo $_GET["amode"]?>';
-	
-	<?php elseif($_GET['mod']=='team' && $_GET['tid'] && !$_GET['amode']):?>
-		location.href='/?mod=teamlist';
-	
-	<?php elseif($_GET['mod'] && $_GET['uid'] && $_GET['amode']):?>
-		location.href='/?mod=<?php echo $_GET["mod"]?>&submode=<?php echo $_GET["amode"]?>&agecode=<?php echo $_GET["agecode"]?>';
-	<?php else:?>
-		history.go(-1);
-	<?php endif?>
-}
+
 function getMyMenuTitle(submode,detailmode) {
     var title;
 	if(submode == 'friends') title="친구";
@@ -188,12 +165,15 @@ function getMyMenuTitle(submode,detailmode) {
 		<div id="loginHeader" style="position:fixed;width:92%;">
 			<div id="loginInfomation">
 				<img src="<?php echo getMyPicSrc($my['uid'])?>" id="loginThumbnail"/>
-				<?if($my['uid']) :?>
+				<?php if($my['uid']):?>
 				<h3>
-					<?=$my['name']?><?=$my['vip']? '<span class="icon icon-tag-vip" data-role="mymenu-item" data-menu="vip"></span>':''?></span>
+					<span><?php echo $my['name']?><?php echo $my['vip']?' <span class="icon icon-tag-vip" data-role="mymenu-item" data-menu="vip"></span>':''?>
+				    </span>
+				    <?php if(!$my['vip']):?>
 					<span class="margin-right" style="vertical-align:middle;">
-						<img src="<?php echo $g['img_layout']?>/pre1.png" data-role="mymenu-item" data-menu="premium" style="height:20px;vertical-align:1px"/>
+						<img src="<?php echo $g['img_layout']?>/pre1.png" data-role="mymenu-item" data-menu="premium" style="width:88px;height:20px;vertical-align:1px"/>
 					</span>
+				    <?php endif?>
 				</h3>
 				<h4><?=$my['id']?></h4>
 				<!-- <h4><a href="/?r=home&a=logout">logout</a></h4>-->
@@ -288,7 +268,6 @@ else if($mod=='mymenu') $contentMarginTop=78;
 <div class="modal effect-scale" id="modal-intro">
   <?php include $g['path_page'].'main_mobile.php';?>
 </div>
-
 <script>  
 // 소셜 로그인 실행  
 $(document).on('click','[data-role="social-login"]',function(){
@@ -308,7 +287,6 @@ if(ButtonMargin > 0) {
 } else {
 	$("#loginButton").css("margin-top", 0);
 }
-
 //# 헤더메뉴 오픈
 $("#header-menu").on("click", function() {
 	header_menu()
@@ -474,7 +452,6 @@ function setUuid(_succFn){
 setUuid("checkDevice"); // 디바이스 체크함수를 호출
 <?php endif?>
 </script>
-
 <!-- intro 모달 제어 구문  -->
 <script>
 $(document).ready(function(){
