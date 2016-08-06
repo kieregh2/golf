@@ -117,7 +117,8 @@ function getMyMenuTitle(submode,detailmode) {
 <div id='_allLayoutBox_' style='background:#f3f3f3;'>
 </div>
 <!--  script end -->
-	<div id="loginOverlay"></div>
+	<div id="loginOverlay">
+	<span id="loginOverlayMymenuClose" class="icon icon-whitex-mymenu" style="display:none"></span></div>
 	<div id="loginViaSocial" style="padding-top:70px;">
 		<span id="loginOverlayClose" class="icon icon-whitex"></span>
         <?php foreach($g['snskor'] as $key => $val):?>
@@ -226,7 +227,7 @@ if(($submode == 'list' && $mod != 'mymenu' || $submode == 'search_list' || $subm
 	<header class="fix" style="position:fixed;top:0;width:100%;z-index:11;background:#fff;">
 		<div id="">
 			<span id="header-menu"></span>
-			<span id="header-title" onclick="location.href='/'"></span>
+			<span id="header-title" onclick="location.href='/?mod=top_main'"></span>
 		</div>
 	</header>
 <? }?>
@@ -241,7 +242,7 @@ if($mod=='rounge'||!$mod){
       else $contentMarginTop=0;
    } 	
 }
-else if($mod=='booking'|| $mod=='matching'||$mod=='event'){
+else if($mod=='booking'|| $mod=='matching'||$mod=='event' || $mod=='top_main'){
    if($submode=='list' || $submode=='ranking_all') $contentMarginTop=43;
    else $contentMarginTop=0;	
 }
@@ -304,7 +305,7 @@ $("#loginOverlayClose, #maybeNexttime").on("click", function() {
 	$("#goLoginOverlay").removeClass("active");
 	$("#nonMymenu").show();	
 });
-$("#loginOverlay").on("click", function() {
+$("#loginOverlayMymenuClose").on("click", function() {
 	close_menu();
 	$("#nonMymenu").show();
 });
@@ -356,14 +357,17 @@ $('[data-role="mymenu-item"]').on('click',function(e){
 })
 var close_menu_body = function() {
 	$("#myMenuOverlay").remove();
-	$("#myMenuOverlay").remove();
 }
 /*mymenu end */
 var open_menu = function() {
 	$("#loginOverlay").addClass("active").css("height", 994);
 	$("#loginPanel").addClass("active").css("height", 992);
+	
+	$("#loginOverlayMymenuClose").css("display","block");
+	
 	// 백그라운드 content 의 scroll 환경 제거 
 	$('body').removeClass('overflow-auto').addClass('overflow-hidden');
+	
     $('#loginBody').scrollTop(0); 	
     $('#loginFooter').scrollTop(0);
 };
@@ -390,6 +394,7 @@ var close_panel = function() {
 };
 var social_login = function(sel) {
 	close_panel();
+	$("#loginOverlayMymenuClose").removeClass("icon-whitex-mymenu");
 	$("#loginOverlay").addClass("active").css("height", 994);
 	$("#loginViaSocial").addClass("active");
 };
