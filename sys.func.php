@@ -49,13 +49,23 @@ function getManLimit() {
 }
 function getHandy() {
 	$array = array(
-			'60' => '60',
-			'70' => '70',
-			'80' => '80',
-			'90' => '90',
-			'100' => '100',
-			'110' => '110',
-			'120' => '120',
+			'71' => '언더',
+			'72' => '이븐',
+			'79' => '싱글',
+			'89' => '80대',
+			'99' => '90대',
+			'100' => '백돌이(백순이)',
+			'101' => '셀수없다',
+	);
+	return $array;
+}
+function getFavoriteAge() {
+	$array = array(
+			'20' => '20대',
+			'30' => '30대',
+			'40' => '40대',
+			'50' => '50대',
+			'51' => '50대이상'
 	);
 	return $array;
 }
@@ -609,52 +619,61 @@ function getTimeTable($field_type='F') {
 		$time['04:30:00'] = '오전 4:30';
 		$time['05:00:00'] = '오전 5:00';
 		$time['05:30:00'] = '오전 5:30';
-		
-	}
-	$time['06:00:00'] = '오전 6:00';
-	$time['06:30:00'] = '오전 6:30';
-	$time['07:00:00'] = '오전 7:00';
-	$time['07:30:00'] = '오전 7:30';
-	$time['08:00:00'] = '오전 8:00';
-	$time['08:30:00'] = '오전 8:30';
-	$time['09:00:00'] = '오전 9:00';
-	$time['09:30:00'] = '오전 9:30';
-	$time['10:00:00'] = '오전 10:00';
-	$time['10:30:00'] = '오전 10:30';
-	$time['11:00:00'] = '오전 11:00';
-	$time['11:30:00'] = '오전 11:30';	
-	$time['12:00:00'] = '오후 12:00';
-	$time['12:30:00'] = '오후 12:30';
-	$time['13:00:00'] = '오후 1:00';
-	$time['13:30:00'] = '오후 1:30';
-	$time['14:00:00'] = '오후 2:00';
-	$time['14:30:00'] = '오후 2:30';
-	$time['15:00:00'] = '오후 3:00';
-	$time['15:30:00'] = '오후 3:30';
-	$time['16:00:00'] = '오후 4:00';
-	$time['16:30:00'] = '오후 4:30';
-	$time['17:00:00'] = '오후 5:00';
-	$time['17:30:00'] = '오후 5:30';
-	$time['18:00:00'] = '오후 6:00';
-	
-	if($field_type == 'S') {
-		$time['18:30:00'] = '오후 6:30';
-		$time['19:00:00'] = '오후 7:00';
-		$time['19:30:00'] = '오후 7:30';
-		$time['20:00:00'] = '오후 8:00';
-		$time['20:30:00'] = '오후 8:30';
-		$time['21:00:00'] = '오후 9:00';
-		$time['21:30:00'] = '오후 9:30';
-		$time['22:00:00'] = '오후 10:00';
-		$time['22:30:00'] = '오후 10:30';
+		$time['06:00:00'] = '오전 6:00';		
+		$time['06:30:00'] = '오전 6:30';		
+		$time['07:00:00'] = '오전 7:00';		
+		$time['07:30:00'] = '오전 7:30';		
+		$time['08:00:00'] = '오전 8:00';	
+		$time['08:30:00'] = '오전 8:30';		
+		$time['09:00:00'] = '오전 9:00';		
+		$time['09:30:00'] = '오전 9:30';		
+		$time['10:00:00'] = '오전 10:00';		
+		$time['10:30:00'] = '오전 10:30';		
+		$time['11:00:00'] = '오전 11:00';		
+		$time['11:30:00'] = '오전 11:30';		
+		$time['12:00:00'] = '오후 12:00';		
+		$time['12:30:00'] = '오후 12:30';		
+		$time['13:00:00'] = '오후 1:00';		
+		$time['13:30:00'] = '오후 1:30';		
+		$time['14:00:00'] = '오후 2:00';		
+		$time['14:30:00'] = '오후 2:30';		
+		$time['15:00:00'] = '오후 3:00';		
+		$time['15:30:00'] = '오후 3:30';		
+		$time['16:00:00'] = '오후 4:00';		
+		$time['16:30:00'] = '오후 4:30';		
+		$time['17:00:00'] = '오후 5:00';		
+		$time['17:30:00'] = '오후 5:30';		
+		$time['18:00:00'] = '오후 6:00';		
+		$time['18:30:00'] = '오후 6:30';		
+		$time['19:00:00'] = '오후 7:00';		
+		$time['19:30:00'] = '오후 7:30';		
+		$time['20:00:00'] = '오후 8:00';		
+		$time['20:30:00'] = '오후 8:30';		
+		$time['21:00:00'] = '오후 9:00';		
+		$time['21:30:00'] = '오후 9:30';		
+		$time['22:00:00'] = '오후 10:00';		
+		$time['22:30:00'] = '오후 10:30';		
 		$time['23:00:00'] = '오후 11:00';
-		$time['23:30:00'] = '오후 11:30';
-	}	
-	
+		$time['23:30:00'] = '오후 11:30';		
+	}else{
+		$time['05:00:00'] = '새벽';
+		$time['08:00:00'] = '오전';
+		$time['11:00:00'] = '오후';
+		$time['16:00:00'] = '야간';
+	}
 	return $time;
 }
+function getFieldTimeTable($sel=null) {
+	$array = array(
+			"05" => "새벽",
+			"08" => "오전",
+			"11" => "오후",
+			"14" => "야간",
+	);
+	return ($sel)? $array[$sel] : $array;
+}
 function getArea($sel=null) {
-	$areaList['j']['name'] = '경기도';		  
+	$areaList['j']['name'] = '&nbsp;경기도';		  
 	
 		$areaList['j']['list']['a'] = '가평군';   		  
     	$areaList['j']['list']['b'] = '고양시';   		  
@@ -733,7 +752,7 @@ function getArea($sel=null) {
 	$areaList['g']['list']['a'] = '울산전체';
 	$areaList['h']['name'] = '세종특별시';
 	$areaList['h']['list']['a'] = '세종전체';
-	$areaList['i']['name'] = '강원도';
+	$areaList['i']['name'] = '&nbsp;강원도';
 	$areaList['i']['list']['a'] = '강릉시';
 	$areaList['i']['list']['b'] = '고성군';
 	$areaList['i']['list']['c'] = '동해시';
@@ -880,7 +899,7 @@ function getArea($sel=null) {
 	$areaList['q']['list']['l'] = '청원군';    
 	$areaList['q']['list']['k'] = '충주시';                   			   
 	
-	$areaList['o']['name'] = '제주도';		  									                              
+	$areaList['o']['name'] = '&nbsp;제주도';		  									                              
     $areaList['o']['list']['a'] = '서귀포시';	  
 	$areaList['o']['list']['b'] = '제주시';	  
 	
@@ -993,11 +1012,13 @@ function sendPush($params) {
 	if(substr(trim($params['platform']),0,3) == 'and') {
 		$GCMPushMessage =  new GCMPushMessage($params['token']);
 		//$result= $GCMPushMessage->send($params['title'],$params['msg'],$params['url'],$params['type'],$addParams);
-		$result= $GCMPushMessage->send($params['title'],$params['msg'],$params['link']);
+		$result= $GCMPushMessage->send($params['title'], $params['msg'], $params['link']);
 	
 	} else if($params['token']) {
+		//var_dump($params['token']."<==>".$params['title']."<==>".$params['msg']."<==>".$params['link']."<==>".$params['type']."<==>".$addParams);
 		//sendIosPush($params['token'],$params['title'],$params['msg'],$params['url'],$params['type'],$addParams);
-		sendIosPush($params['token'],$params['title'],$params['msg'],$params['link']);
+		sendIosPush($params['token'], $params['title'], $params['msg'], $params['link'], $params['type'], $addParams);
+		//$result = sendIosPush($params['token'],$params['title'],$params['msg'],$params['link']);
 	}	
 		return $result;
 }
@@ -1079,7 +1100,7 @@ class GCMPushMessage {
         exit(1);
     }
 }
-function sendIosPush($deviceToken,$title,$message,$url,$attend,$addParams) {
+function sendIosPush($deviceToken,$title,$message,$url,$attend=null,$addParams=null) {
  
 //$deviceToken = '67813b2...af1424b'; // 디바이스토큰ID
 //$message = 'Message received from eye'; // 전송할 메시지
@@ -1091,7 +1112,7 @@ function sendIosPush($deviceToken,$title,$message,$url,$attend,$addParams) {
 	syslog(LOG_WARNING,"DID: $deviceToken\n");
 	// 실서비스용
 	//$devmode = 0;
-	$devmode = 1;
+	$devmode = 0;
 	// 개발용
 	if( $devmode == 1)
 	{
@@ -1101,9 +1122,10 @@ function sendIosPush($deviceToken,$title,$message,$url,$attend,$addParams) {
 	else {
 		// 실서비스용
 		$apnsHost = 'gateway.push.apple.com';
-		$apnsCert = $_SERVER['DOCUMENT_ROOT'].'/_lib/apns_key.pem';
+		$apnsCert = $_SERVER['DOCUMENT_ROOT'].'/_lib/apns.pem';
+		
 	}
- 
+	
 	$apnsPort = 2195;
  
 	if($attend == 'attendDialog') {
@@ -1115,7 +1137,7 @@ function sendIosPush($deviceToken,$title,$message,$url,$attend,$addParams) {
  
 	$streamContext = stream_context_create();
 	stream_context_set_option($streamContext, 'ssl', 'local_cert', $apnsCert);
-	stream_context_set_option($streamContext, 'ssl', 'passphrase',"soccercall");
+	stream_context_set_option($streamContext, 'ssl', 'passphrase',"Clubdenim07");
  
 	$apns = stream_socket_client('ssl://'.$apnsHost.':'.$apnsPort, $error, $errorString, 2, STREAM_CLIENT_CONNECT, $streamContext);
 	if($apns) {
@@ -1123,7 +1145,6 @@ function sendIosPush($deviceToken,$title,$message,$url,$attend,$addParams) {
 		fwrite($apns, $apnsMessage);
 		fclose($apns);
 	}
-	
 }
 function myCallPush($agesend,$sendpart) {
 	$LastRow = mysql_fetch_assoc(mysql_query("select max(uid) as maxuid from s_match_data"));
@@ -1271,7 +1292,7 @@ function getMyPicSrc($memberuid){
    
     return $avatar_src; 
 }
-function getUserAgent(){
+  function getUserAgent(){
 		$device = '';
 		
 		if( stristr($_SERVER['HTTP_USER_AGENT'],'ipad') ) {

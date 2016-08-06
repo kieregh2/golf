@@ -350,6 +350,9 @@ $('[data-role="mymenu-item"]').on('click',function(e){
        title : title,
        url : url
     }); 
+    sessionStorage.setItem("submode",submode);
+    var sess_submode=sessionStorage.getItem("submode");
+    console.log(sess_submode);
 })
 var close_menu_body = function() {
 	$("#myMenuOverlay").remove();
