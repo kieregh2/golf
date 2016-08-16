@@ -12,6 +12,14 @@ if ($g['use_social'])
 	include $g['path_module'].$g['mdl_slogin'].'/lang.korean/action/a.slogin.check.php';
 }
 $UA=getUserAgent();
+// 프리미엄 기간 체크 
+if($my['uid'] && $my['premium']){
+	$Premium__Right=''; // 프리미엄 자격 
+    $PMU=getDbData('s_payment_data','memberuid='.$my['uid'].' and step=2','expiredate');
+    $expiredate=str_replace('-', '', $PMU['expiredate']);
+    if($expiredate < $date['today']) $Premium__Right='expired';
+    else $Premium__Right='available';
+}
 ?>
 <style>
 .overflow-auto {overflow:auto;height:98%;}
@@ -176,7 +184,7 @@ function getMyMenuTitle(submode,detailmode) {
 				<h3>
 					<span><?php echo $my['name']?><?php echo $my['vip']?' <span class="icon icon-tag-vip" data-role="mymenu-item" data-menu="vip"></span>':''?>
 				    </span>
-				    <?php if(!$my['vip']):?>
+				    <?php if(!$my['vip'] && (!$my['premium'] || ($my['premium'] && $Premium__Right=='expired'))):?>
 					<span class="margin-right" style="vertical-align:middle;">
 						<img src="<?php echo $g['img_layout']?>/pre1.png" data-role="mymenu-item" data-menu="premium" style="width:88px;height:20px;vertical-align:1px"/>
 					</span>
