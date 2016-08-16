@@ -435,18 +435,14 @@ $('[data-role="mymenu-item"]').on('click',function(e){
 function func_afterLoadMymenu(submode){
     
     if(submode=='setting' || submode=='profile'){
-        $.post(rooturl+'/?r='+raccount+'&m=member&a=getUserPic',{},function(response){
-		var result=$.parseJSON(response);
-		var UserPicSrc=result.src; 
-	    // 설정 페이지 사진 세팅   
+    	var UserPicSrc=$("#loginThumbnail").attr("src");
+
 		$("#change_photo").css({"background":"url('"+UserPicSrc+"')", "background-repeat":"no-repeat", "background-position":"center center","background-size":"150px"});  
 		 // 로그인 판넬 사진 세팅  
 		 $("#loginThumbnail").attr("src",UserPicSrc);
 			    
 		 // 프로필 페이지 사진 세팅  
 		 $("#change_photo2").css({"background":"url('"+UserPicSrc+"')", "background-repeat":"no-repeat", "background-position":"center center","background-size":"150px"});
-		 });
-	
 	}
 }
 var close_menu_body = function() {
