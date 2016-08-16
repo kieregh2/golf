@@ -46,6 +46,7 @@ if ($g['use_social'])
 <?php endif?>	
 <script type='text/javascript' src='/_core/js/jquery-ui/jquery-ui.min.js'></script>
 <link type="text/css" rel="stylesheet" charset="utf-8" href="/_core/js/jquery-ui/jquery-ui.min.css"/>
+<script type='text/javascript' src='/static/js/just-touch.js'></script>
 <script type='text/javascript' src='/layouts/mobile/_rc/rc-min.js'></script>
 <!--  script start -->
  
@@ -118,7 +119,7 @@ function getMyMenuTitle(submode,detailmode) {
 </div>
 <!--  script end -->
 	<div id="loginOverlay">
-	<span id="loginOverlayMymenuClose" class="icon icon-whitex-mymenu" style="display:none"></span></div>
+	<span id="loginOverlayMymenuClose" class="icon " style="display:none"></span></div>
 	<div id="loginViaSocial" style="padding-top:70px;">
 		<span id="loginOverlayClose" class="icon icon-whitex"></span>
         <?php foreach($g['snskor'] as $key => $val):?>
@@ -242,7 +243,7 @@ if($mod=='rounge'||!$mod){
       else $contentMarginTop=0;
    } 	
 }
-else if($mod=='booking'|| $mod=='matching'||$mod=='event' || $mod=='top_main'){
+else if($mod=='booking'|| $mod=='matching'||$mod=='event' || $mod=='top_main' || $mod=='top_main2'){
    if($submode=='list' || $submode=='ranking_all') $contentMarginTop=43;
    else $contentMarginTop=0;	
 }
@@ -309,6 +310,10 @@ $("#loginOverlayMymenuClose").on("click", function() {
 	close_menu();
 	$("#nonMymenu").show();
 });
+$("#loginHeader").on("swipeleft", function() { 
+	close_menu();
+	$("#nonMymenu").show();
+});
 $("#loginButton").on("click", function() {
 	social_login();
 });
@@ -366,7 +371,6 @@ function func_afterLoadMymenu(submode){
 		var UserPicSrc=result.src; 
 	        	// 설정 페이지 사진 세팅   
 		$("#change_photo").css({"background":"url('"+UserPicSrc+"')", "background-repeat":"no-repeat", "background-position":"center center","background-size":"150px"});  
-
 		 // 로그인 판넬 사진 세팅  
 		 $("#loginThumbnail").attr("src",UserPicSrc);
 			    
@@ -376,7 +380,6 @@ function func_afterLoadMymenu(submode){
 	
 	}
 }
-
 var close_menu_body = function() {
 	$("#myMenuOverlay").remove();
 }
