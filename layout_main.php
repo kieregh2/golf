@@ -11,6 +11,7 @@ if ($g['use_social'])
 	//$_isModal = true;
 	include $g['path_module'].$g['mdl_slogin'].'/lang.korean/action/a.slogin.check.php';
 }
+$UA=getUserAgent();
 ?>
 <style>
 .overflow-auto {overflow:auto;height:98%;}
@@ -165,7 +166,12 @@ function getMyMenuTitle(submode,detailmode) {
 	<div id="loginPanel" >
 		<div id="loginHeader" style="position:fixed;width:92%;">
 			<div id="loginInfomation">
-				<img src="<?php echo getMyPicSrc($my['uid'])?>" id="loginThumbnail"/>
+				<img src="<?php echo getMyPicSrc($my['uid'])?>" id="loginThumbnail" data-role="mymenu-item" data-menu="userPic"/>
+				
+				<?php if($UA=='iphone' || $UA=='ipad' ):?>
+		            <span style="display:none"><input type="file" name="menutop_photo"  id="menuPhoto"/></span>
+		        <?php endif?>
+		        <input type='hidden' name='menu_photo' id='photo' value='<?=$my['photo']?>' data-role='none'/>  
 				<?php if($my['uid']):?>
 				<h3>
 					<span><?php echo $my['name']?><?php echo $my['vip']?' <span class="icon icon-tag-vip" data-role="mymenu-item" data-menu="vip"></span>':''?>
@@ -182,6 +188,60 @@ function getMyMenuTitle(submode,detailmode) {
 				<h3>손님입니다.</span></h3>
 				<h4>로그인/회원가입을 해주세요.</h4>
 				<? endif?>
+				<script>
+				function show__Message_main(message){
+				 	setTimeout(function(){
+				        $.notify({message: message},{
+					        type:"danger",
+					        placement: {
+								from: "bottom",
+								align: "center"
+							},
+							offset: {
+								x: 0,
+								y: 60
+							},
+							animate: {
+								enter: 'animated fadeInUp',
+								exit: 'animated fadeOutDown'
+							}
+					    });
+				     },300);	
+				}
+				// 사진 업데이트 - ios
+				$('#menuPhoto').on('change',function(e){
+				     var files=e.target.files;
+				     var file=files[0];
+				     var reader = new FileReader();
+					 reader.readAsDataURL(file);
+					 //로드 한 후
+					 reader.onload = function  () {
+					        //로컬 이미지를 보여주기
+					        $("#change_photo").css({"background":"url('"+reader.result+"')", "background-repeat":"no-repeat", "background-position":"center center","background-size":"150px auto"});
+					        // 로그인 사진 src 업데이트 
+						    $("#loginThumbnail").attr("src",reader.result);
+						    // 프로필 페이지 사진 업데이트 
+						    $("#change_photo2").css({"background":"url('"+reader.result+"')", "background-repeat":"no-repeat", "background-position":"center center","background-size":"150px auto"});
+				   
+				            // 사진 폼  ajax 전송 
+					         data = new FormData();
+							 data.append("menutop_photo",file); // 가상의 "file" 이라는 오브젝트를 만들어서 전송한다.
+							 data.append("agent","<?php echo $UA?>"); // iphone 값 넘김 
+							 $.ajax({
+							     type: "POST",
+							     url : rooturl+'/?r='+raccount+'&m=member&a=updateUserPic_main',
+							     data:data,
+							     cache: false,
+								 contentType: false,
+								 processData: false,
+								 success:function(response) {
+						              var result=$.parseJSON(response);
+							          show__Message_main(result.message);	
+							     }
+						    }); // ajax
+					} 
+				});
+				</script>
 			</div>
 		</div>
 		<?if($my['uid']) :?>
@@ -349,18 +409,27 @@ $('[data-role="mymenu-item"]').on('click',function(e){
 	e.preventDefault();
     var submode=$(this).data('menu');
     var detailmode='';
-	var title=getMyMenuTitle(submode,detailmode);
-    var url='/?mod=mymenu&submode='+submode;
-    $(mymenu_modal).find('.content').load('/?mod=mymenu&submode='+submode+'&detailmode='+detailmode+'&load=Y',function(){
-    	func_afterLoadMymenu(submode); // load 후 실행 함수 호출  
-    });
-    $(mymenu_modal).modals({
-       title : title,
-       url : url
-    }); 
-    sessionStorage.setItem("submode",submode);
-    var sess_submode=sessionStorage.getItem("submode");
-    console.log(sess_submode);
+    if(submode=='userPic'){
+        <?php if($UA=='android'):?>
+            openFileChooser('resultFileSuccess_main');
+        <?php elseif($UA=='iphone' || $UA=='ipad'):?>
+            $('#menuPhoto').click();
+        <?php endif?>  
+    }else{
+       	var title=getMyMenuTitle(submode,detailmode);
+	    var url='/?mod=mymenu&submode='+submode;
+	    $(mymenu_modal).find('.content').load('/?mod=mymenu&submode='+submode+'&detailmode='+detailmode+'&load=Y',function(){
+	    	func_afterLoadMymenu(submode); // load 후 실행 함수 호출  
+	    });
+	    $(mymenu_modal).modals({
+	       title : title,
+	       url : url
+	    }); 
+	    sessionStorage.setItem("submode",submode);
+	    var sess_submode=sessionStorage.getItem("submode");
+	    console.log(sess_submode);    	
+    }
+
 })
 // 마이메뉴 모달 오픈후 필요한 함수 바인딩 
 function func_afterLoadMymenu(submode){
@@ -369,7 +438,7 @@ function func_afterLoadMymenu(submode){
         $.post(rooturl+'/?r='+raccount+'&m=member&a=getUserPic',{},function(response){
 		var result=$.parseJSON(response);
 		var UserPicSrc=result.src; 
-	        	// 설정 페이지 사진 세팅   
+	    // 설정 페이지 사진 세팅   
 		$("#change_photo").css({"background":"url('"+UserPicSrc+"')", "background-repeat":"no-repeat", "background-position":"center center","background-size":"150px"});  
 		 // 로그인 판넬 사진 세팅  
 		 $("#loginThumbnail").attr("src",UserPicSrc);
@@ -514,3 +583,45 @@ $(window).on('load', function () {
     RC_initSwiper(); 
 })
 </script>
+<!-- 메뉴 상단 이미지 변경 스크립트 추가 by kiere 20160816-->
+<script>
+function openFileChooser(_succFn) {
+    var param = {
+        type : 'image/*',
+        crop : false,
+        succFn : _succFn
+    };
+    Hybrid.exe('HybridIf.openFileChooser', param);
+}
+function resultFileSuccess_main(dts) {
+    var data = $.parseJSON(dts);
+        
+    $("#change_photo").css({"background":"url('"+data.name+"')", "background-repeat":"no-repeat", "background-position":"center center","background-size":"150px auto"});
+    $("#photo").val(data.name);
+    
+    // 로그인 사진 src 업데이트 
+    $("#loginThumbnail").attr("src",data.name);
+    // 프로필 페이지 사진 업데이트 
+    $("#change_photo2").css({"background":"url('"+data.name+"')", "background-repeat":"no-repeat", "background-position":"center center"});
+    $('input[name="menu_photo"]').val(data.name);
+    updateUserPic_main(data.name);
+}
+
+
+// 사진 업데이트 - android
+var updateUserPic_main=function(photo){
+   	$.post({url: rooturl+'/?r='+raccount+'&m=member&a=updateUserPic_main',
+	  	 data: {
+	 		menu_photo : photo
+		 },
+	     success:function(response) {
+              var result=$.parseJSON(response);
+	          show__Message_main(result.message);	
+	     }
+	});          
+}
+
+
+
+</script>
+<!-- 메뉴 상단 이미지 변경 스크립트 추가 by kiere -->
