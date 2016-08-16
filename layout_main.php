@@ -346,7 +346,9 @@ $('[data-role="mymenu-item"]').on('click',function(e){
     var detailmode='';
 	var title=getMyMenuTitle(submode,detailmode);
     var url='/?mod=mymenu&submode='+submode;
-    $(mymenu_modal).find('.content').load('/?mod=mymenu&submode='+submode+'&detailmode='+detailmode+'&load=Y');
+    $(mymenu_modal).find('.content').load('/?mod=mymenu&submode='+submode+'&detailmode='+detailmode+'&load=Y',function(){
+    	func_afterLoadMymenu(submode); // load 후 실행 함수 호출  
+    });
     $(mymenu_modal).modals({
        title : title,
        url : url
@@ -355,6 +357,26 @@ $('[data-role="mymenu-item"]').on('click',function(e){
     var sess_submode=sessionStorage.getItem("submode");
     console.log(sess_submode);
 })
+// 마이메뉴 모달 오픈후 필요한 함수 바인딩 
+function func_afterLoadMymenu(submode){
+    
+    if(submode=='setting' || submode=='profile'){
+        $.post(rooturl+'/?r='+raccount+'&m=member&a=getUserPic',{},function(response){
+		var result=$.parseJSON(response);
+		var UserPicSrc=result.src; 
+	        	// 설정 페이지 사진 세팅   
+		$("#change_photo").css({"background":"url('"+UserPicSrc+"')", "background-repeat":"no-repeat", "background-position":"center center","background-size":"150px"});  
+
+		 // 로그인 판넬 사진 세팅  
+		 $("#loginThumbnail").attr("src",UserPicSrc);
+			    
+		 // 프로필 페이지 사진 세팅  
+		 $("#change_photo2").css({"background":"url('"+UserPicSrc+"')", "background-repeat":"no-repeat", "background-position":"center center","background-size":"150px"});
+		 });
+	
+	}
+}
+
 var close_menu_body = function() {
 	$("#myMenuOverlay").remove();
 }
